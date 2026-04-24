@@ -1457,6 +1457,61 @@ body {
   margin: 0 auto;
 }
 
+/* ─── CONTENT FORMATS ─── */
+.formats-strip {
+  background: var(--bark);
+  padding: 5rem 2rem;
+}
+
+.formats-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.formats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 700px) { .formats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 400px) { .formats-grid { grid-template-columns: 1fr; } }
+
+.format-card {
+  background: var(--soil);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(196,168,130,0.1);
+}
+
+.format-card:hover {
+  background: var(--warm);
+  border-color: var(--ember);
+}
+
+.format-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.format-card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+.format-card p {
+  font-size: 0.75rem;
+  color: var(--mist);
+  line-height: 1.5;
+}
+
 .comparison-table {
   margin-top: 2rem;
   border: 1px solid rgba(196,168,130,0.1);
@@ -1750,13 +1805,13 @@ footer {
 <nav class="top-nav">
   <div class="nav-logo" onclick="scrollToSection('hero')">innerG</div>
   <div class="nav-links">
-    <a onclick="scrollToSection('how-it-works')" data-section="how-it-works">How it works</a>
-    <a onclick="scrollToSection('examples')" data-section="examples">Examples</a>
-    <a onclick="scrollToSection('community')" data-section="community">Community</a>
-    <a onclick="scrollToSection('forum')" data-section="forum">Forum</a>
-    <a onclick="scrollToSection('founders')" data-section="founders">Founders</a>
-    <a onclick="scrollToSection('card')" data-section="card">Card</a>
-    <a onclick="scrollToSection('principles')" data-section="principles">Rules</a>
+    <a onclick="scrollToSection('how-it-works')">How it works</a>
+    <a onclick="scrollToSection('examples')">Examples</a>
+    <a onclick="scrollToSection('community')">Community</a>
+    <a onclick="scrollToSection('formats')">Formats</a>
+    <a onclick="scrollToSection('founders')">Founders</a>
+    <a onclick="scrollToSection('card')">Card</a>
+    <a onclick="scrollToSection('principles')">Rules</a>
     <span onclick="scrollToSection('cta')" class="nav-cta">Join</span>
     <button class="theme-toggle-mini" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
   </div>
@@ -2165,6 +2220,38 @@ footer {
   </div>
 </div>
 
+<!-- ═══ CONTENT FORMATS -->
+<div class="formats-strip" id="formats">
+  <div class="formats-inner reveal">
+    <span class="eyebrow">More ways to share</span>
+    <h2 class="section-title">Any format.<br>Your choice.</h2>
+    <p class="section-body">Exchange isn't just skills in person. Share knowledge, create together, and build in any format that matters.</p>
+
+    <div class="formats-grid">
+      <div class="format-card" onclick="showFormatDetail('video')">
+        <span class="format-icon">🎬</span>
+        <h3>Video</h3>
+        <p>Live sessions, recordings, tutorials. Face to face matters.</p>
+      </div>
+      <div class="format-card" onclick="showFormatDetail('audio')">
+        <span class="format-icon">🎧</span>
+        <h3>Audio</h3>
+        <p>Calls, voice notes, sonic exchanges. Your voice is a gift.</p>
+      </div>
+      <div class="format-card" onclick="showFormatDetail('text')">
+        <span class="format-icon">✍</span>
+        <h3>Written</h3>
+        <p>Letters, guides, documentation. Words outlive the moment.</p>
+      </div>
+      <div class="format-card" onclick="showFormatDetail('live')">
+        <span class="format-icon">🌍</span>
+        <h3>Live</h3>
+        <p>Co-create in real-time. Build something together, now.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ COMPARISON -->
 <div class="comparison-strip">
   <div class="comparison-inner reveal">
@@ -2359,6 +2446,17 @@ function showFounderDetail(name) {
 
 function showCardDetail() {
   showModal('Membership Card', 'Every member receives a unique sigil — a constellation pattern generated from your member ID. The same ID always produces the same sigil.<br><br>Get it as:<br>• Digital PNG (share anywhere)<br>• Print-ready PDF<br>• Physical card via print-on-demand<br><br>The QR code links to /verify/:card_token — proving you belong.');
+}
+
+function showFormatDetail(format) {
+  const details = {
+    video: 'Video calls, screen shares, recorded tutorials. Face to face matters — even digitally. Exchange a live session for your skills.',
+    audio: 'Voice notes, phone calls, audio letters. Sometimes your voice carries what words cannot. Exchange sonic moments.',
+    text: 'Written guides, letters, documentation, emails. Words outlive the moment — create something that lasts.',
+    live: 'Real-time co-creation, workshops, build sessions. Two minds, one output — make something together, now.'
+  };
+  const titles = { video: 'Video Exchange', audio: 'Audio Exchange', text: 'Written Exchange', live: 'Live Co-Creation' };
+  showModal(titles[format], details[format]);
 }
 
 function showCompDetail(index) {
