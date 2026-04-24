@@ -47,7 +47,6 @@ body {
   color: var(--cream);
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
-}
   overflow-x: hidden;
   line-height: 1.6;
   transition: background 0.4s ease, color 0.4s ease;
@@ -88,37 +87,6 @@ body {
 
 [data-theme="light"] .theme-toggle:hover {
   color: #fff;
-}
-
-/* PRESENTATION ARROWS */
-.section-nav {
-  position: fixed;
-  right: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  z-index: 100;
-}
-
-.section-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(196,168,130,0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-}
-
-.section-dot:hover {
-  background: var(--sand);
-}
-
-.section-dot.active {
-  background: var(--ember);
-  transform: scale(1.3);
 }
 
 /* ─── HERO ─── */
@@ -1475,13 +1443,7 @@ footer {
 <!-- THEME TOGGLE -->
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
 
-<div class="slide-container" id="slides">
-
-<!-- SLIDE 0: HERO -->
-<div class="slide-container" id="slides">
-
 <!-- ═══ HERO -->
-<div class="slide" id="slide-0">
 <div class="hero">
   <div class="hero-eyebrow">Coming soon · Build with us</div>
 
@@ -1502,13 +1464,12 @@ footer {
     <span class="pill">Your voice for their time</span>
   </div>
 
-  <div class="scroll-hint">Swipe →</div>
-</div>
+  <div class="scroll-hint">scroll ↓</div>
 </div>
 
-<!-- SLIDE 1: HOW IT WORKS -->
-<div class="slide" id="slide-1">
-<div class="section reveal" style="padding-top: 4rem; padding-bottom: 4rem;">
+<!-- ═══ HOW IT WORKS -->
+<div class="divider"></div>
+<div class="section reveal">
   <span class="eyebrow">How it works</span>
   <h2 class="section-title">Four steps.<br>No money involved.</h2>
   <p class="section-body">Anyone can join a group. But you can only join this one by completing a real exchange with a real person first.</p>
@@ -1561,12 +1522,7 @@ footer {
   </div>
 </div>
 
-<!-- SLIDE 1 -->
-<div class="slide" id="slide-1">
-<div class="exchange-strip" style="padding: 4rem 2rem;">
-  <div class="exchange-strip-inner reveal">
-    <span class="eyebrow">Real examples</span>
-    <h2 class="section-title">This works across every world</h2>
+<!-- ═══ WORLD EXAMPLES -->
 <div class="exchange-strip">
   <div class="exchange-strip-inner reveal">
     <span class="eyebrow">Real examples</span>
@@ -1937,23 +1893,6 @@ footer {
 </div>
 
 <footer>innerG · X · change &nbsp;·&nbsp; 2026</footer>
-</div><!-- END SLIDE CONTAINER -->
-
-<!-- SLIDE NAVIGATION -->
-<div class="slide-nav">
-  <div class="slide-dot active" onclick="goToSlide(0)"></div>
-  <div class="slide-dot" onclick="goToSlide(1)"></div>
-  <div class="slide-dot" onclick="goToSlide(2)"></div>
-  <div class="slide-dot" onclick="goToSlide(3)"></div>
-  <div class="slide-dot" onclick="goToSlide(4)"></div>
-  <div class="slide-dot" onclick="goToSlide(5)"></div>
-  <div class="slide-dot" onclick="goToSlide(6)"></div>
-  <div class="slide-dot" onclick="goToSlide(7)"></div>
-</div>
-
-<!-- ARROWS -->
-<div class="slide-arrow left" onclick="prevSlide()">‹</div>
-<div class="slide-arrow right" onclick="nextSlide()">›</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
@@ -2090,48 +2029,6 @@ function joinWaitlist() {
   localStorage.setItem('innergxchange_waitlist', JSON.stringify(waitlist));
   
   showModal('You\'re in.', 'Thanks for joining. We\'ll email you when the community is ready for its first exchanges.<br><br>If you want to help build it faster, hit "Support on GitHub" — every bit helps.');
-}
-
-// Slide navigation
-function goToSlide(index) {
-  const slides = document.querySelectorAll(\'.slide\');
-  const dots = document.querySelectorAll(\'.slide-dot\');
-  if (slides[index]) {
-    slides[index].scrollIntoView({ behavior: \'smooth\' });
-    updateDots(index);
-  }
-}
-
-function nextSlide() {
-  const current = getCurrentSlide();
-  goToSlide(current + 1);
-}
-
-function prevSlide() {
-  const current = getCurrentSlide();
-  goToSlide(current - 1);
-}
-
-function getCurrentSlide() {
-  const container = document.getElementById(\'slides\');
-  const scrollLeft = container.scrollLeft;
-  const slideWidth = window.innerWidth;
-  return Math.round(scrollLeft / slideWidth);
-}
-
-function updateDots(index) {
-  const dots = document.querySelectorAll(\'.slide-dot\');
-  dots.forEach((dot, i) => {
-    dot.classList.toggle(\'active\', i === index);
-  });
-}
-
-// Update dots on scroll
-const container = document.getElementById(\'slides\');
-if (container) {
-  container.addEventListener(\'scroll\', () => {
-    updateDots(getCurrentSlide());
-  });
 }
 
 // Keyboard shortcuts
