@@ -1099,12 +1099,12 @@ body {
 }
 
 .membership-card {
-  width: 280px;
-  height: 176px;
-  background: linear-gradient(135deg, var(--soil) 0%, var(--bark) 100%);
-  border: 1px solid rgba(196,168,130,0.2);
-  border-radius: 12px;
-  padding: 1.25rem;
+  width: 340px;
+  height: 214px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 60%, #2a2a2a 100%);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 1.5rem;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -1112,16 +1112,31 @@ body {
   text-align: left;
   display: flex;
   flex-direction: column;
+  box-shadow: 
+    0 4px 24px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -1px 0 rgba(0,0,0,0.3);
 }
 
-[data-theme="light"] .membership-card {
-  background: linear-gradient(135deg, #2a2520 0%, #1a1815 100%);
-  border-color: rgba(196,168,130,0.3);
+.membership-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.03) 100%);
+  pointer-events: none;
+  border-radius: 16px;
 }
 
 .membership-card:hover {
   transform: scale(1.02);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+  box-shadow: 
+    0 20px 48px rgba(0,0,0,0.5),
+    0 0 60px rgba(212,98,42,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  border-color: rgba(212,98,42,0.3);
 }
 
 .card-top {
@@ -1132,14 +1147,16 @@ body {
 
 .card-label {
   font-family: 'Fraunces', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  color: var(--sand);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
 }
 
 .card-year {
-  font-size: 0.6rem;
-  color: var(--whisper);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 300;
 }
 
 .card-sigil {
@@ -1150,8 +1167,9 @@ body {
 }
 
 .sigil-svg {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 8px rgba(232,201,122,0.3));
 }
 
 .sigil-svg circle,
@@ -1160,11 +1178,11 @@ body {
 }
 
 .sigil-svg .sigil-center {
-  fill: #e8c97a;
+  fill: #f0d878;
 }
 
 .sigil-svg .sigil-node {
-  fill: #c4a882;
+  fill: #c9c9c9;
 }
 
 .sigil-svg .sigil-line {
@@ -1175,23 +1193,26 @@ body {
 
 .card-name {
   font-family: 'Fraunces', serif;
-  font-size: 1rem;
-  font-weight: 300;
-  color: var(--cream);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .card-offer {
-  font-size: 0.65rem;
-  color: var(--mist);
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.6);
   font-style: italic;
 }
 
 .card-world {
-  font-size: 0.5rem;
-  letter-spacing: 0.15em;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--green);
+  color: #5a8a5a;
   margin-top: 0.25rem;
+  font-weight: 500;
 }
 
 .card-footer {
@@ -1200,19 +1221,23 @@ body {
   align-items: center;
   margin-top: auto;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(196,168,130,0.1);
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .card-id {
-  font-size: 0.55rem;
-  letter-spacing: 0.1em;
-  color: var(--whisper);
-  font-family: monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.5);
+  font-family: 'DM Mono', monospace;
 }
 
 .card-verify {
-  font-size: 0.9rem;
-  color: var(--sand);
+  font-size: 1rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.card-verify:hover {
+  color: #d4622a;
 }
 
 .card-shine {
