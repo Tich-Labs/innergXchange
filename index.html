@@ -779,6 +779,11 @@ body {
 .node.member::before { background: linear-gradient(to right, rgba(196,168,130,0.3), transparent); }
 .node.pending { opacity: 0.3; }
 
+.node.preview {
+  background: var(--soil);
+  border: 1px dashed rgba(196,168,130,0.2);
+}
+
 .node-icon { font-size: 1.1rem; margin-bottom: 0.25rem; transition: transform 0.3s ease; }
 .node:hover .node-icon { transform: scale(1.2); }
 .node.you .node-icon { color: var(--sun); }
@@ -1310,51 +1315,51 @@ footer {
 <!-- ═══ COMMUNITY -->
 <div class="divider"></div>
 <div class="community-section reveal">
-  <span class="eyebrow">The community</span>
-  <h2 class="section-title">Everyone here<br>has already given</h2>
-  <p class="section-body">That's the difference. This isn't a group you join. It's a circle you earn your way into — and everyone inside it has done the same.</p>
+  <span class="eyebrow">What we're building toward</span>
+  <h2 class="section-title">A constellation<br>of givers</h2>
+  <p class="section-body">Everyone you see here earned their place by completing a real exchange. This is what the community looks like once it's alive.</p>
 
   <div class="node-grid">
-    <div class="node you" onclick="showNodeDetail('You', 'Your profile', 'What you offer: Gardening · Language')">
+    <div class="node preview" onclick="showNodeDetail('Future Member', 'You', 'Your offer goes here')">
       <div class="node-icon">✦</div>
       <div class="node-name">You</div>
-      <div class="node-offer">Gardening · Language</div>
-      <div class="node-badge">Your node</div>
+      <div class="node-offer">Your skill · space · time</div>
+      <div class="node-badge">Join first</div>
     </div>
-    <div class="node matched" onclick="showNodeDetail('Miriam A.', 'Your match', 'What she offers: Spare room · Hosting')">
+    <div class="node preview" onclick="showNodeDetail('Sample Match', 'Example offer', 'Room near water · 3 weeks')">
       <div class="node-icon">◈</div>
       <div class="node-name">Miriam A.</div>
       <div class="node-offer">Spare room · Hosting</div>
-      <div class="node-badge">Your match</div>
+      <div class="node-badge">Sample</div>
     </div>
-    <div class="node member" onclick="showNodeDetail('Jomo W.', 'Member', 'What he offers: Roofing · Repair')">
+    <div class="node preview" onclick="showNodeDetail('Jomo', 'Member', 'Van for moving · repairs')">
       <div class="node-icon">◉</div>
       <div class="node-name">Jomo W.</div>
       <div class="node-offer">Roofing · Repair</div>
       <div class="node-badge">Member</div>
     </div>
-    <div class="node member" onclick="showNodeDetail('Sól B.', 'Member', 'What they offer: Breathwork · Space')">
+    <div class="node preview" onclick="showNodeDetail('Sól', 'Member', 'Breathwork sessions')">
       <div class="node-icon">◇</div>
       <div class="node-name">Sól B.</div>
       <div class="node-offer">Breathwork · Space</div>
       <div class="node-badge">Member</div>
     </div>
-    <div class="node member" onclick="showNodeDetail('Ife O.', 'Member', 'What they offer: Cooking · Nairobi')">
+    <div class="node preview" onclick="showNodeDetail('Ife', 'Member', 'Cooking · Nairobi')">
       <div class="node-icon">⟡</div>
       <div class="node-name">Ife O.</div>
       <div class="node-offer">Cooking · Nairobi</div>
       <div class="node-badge">Member</div>
     </div>
-    <div class="node member" onclick="showNodeDetail('Kwame A.', 'Member', 'What he offers: Music · Teaching')">
+    <div class="node preview" onclick="showNodeDetail('Kwame', 'Member', 'Music · teaching')">
       <div class="node-icon">✧</div>
       <div class="node-name">Kwame A.</div>
       <div class="node-offer">Music · Teaching</div>
       <div class="node-badge">Member</div>
     </div>
-    <div class="node member" onclick="showNodeDetail('Zara H.', 'Member', 'What she offers: Translation · 3 languages')">
+    <div class="node preview" onclick="showNodeDetail('Zara', 'Member', 'Swahili · Kikuyu · English')">
       <div class="node-icon">⬡</div>
       <div class="node-name">Zara H.</div>
-      <div class="node-offer">Translation · 3 languages</div>
+      <div class="node-offer">Translation · 3 lang</div>
       <div class="node-badge">Member</div>
     </div>
   </div>
