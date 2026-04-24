@@ -55,11 +55,11 @@ body {
 /* ─── THEME TOGGLE ─── */
 .theme-toggle {
   position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
+  top: 1rem;
+  right: 1rem;
   z-index: 1000;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid rgba(196,168,130,0.25);
   background: rgba(42,32,24,0.8);
@@ -68,9 +68,65 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
   color: var(--sand);
+}
+
+/* ─── TOP NAV ─── */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background: rgba(26,20,16,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(196,168,130,0.08);
+}
+
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--cream);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.nav-links a {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--cream);
+}
+
+.nav-cta {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(196,168,130,0.3);
+  border-radius: 4px;
+}
+
+.nav-cta:hover {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--cream);
 }
 
 [data-theme="light"] .theme-toggle {
@@ -1443,8 +1499,22 @@ footer {
 <!-- THEME TOGGLE -->
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
 
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-logo" onclick="scrollTo('hero')">innerG</div>
+  <div class="nav-links">
+    <a onclick="scrollTo('how-it-works')">How it works</a>
+    <a onclick="scrollTo('examples')">Examples</a>
+    <a onclick="scrollTo('community')">Community</a>
+    <a onclick="scrollTo('founders')">Founders</a>
+    <a onclick="scrollTo('card')">Card</a>
+    <a onclick="scrollTo('principles')">Rules</a>
+    <a onclick="scrollTo('cta')" class="nav-cta">Join</a>
+  </div>
+</nav>
+
 <!-- ═══ HERO -->
-<div class="hero">
+<div class="hero" id="hero">
   <div class="hero-eyebrow">Coming soon · Build with us</div>
 
   <div class="hero-title">
@@ -1468,8 +1538,7 @@ footer {
 </div>
 
 <!-- ═══ HOW IT WORKS -->
-<div class="divider"></div>
-<div class="section reveal">
+<div class="section" id="how-it-works">
   <span class="eyebrow">How it works</span>
   <h2 class="section-title">Four steps.<br>No money involved.</h2>
   <p class="section-body">Anyone can join a group. But you can only join this one by completing a real exchange with a real person first.</p>
@@ -1523,7 +1592,7 @@ footer {
 </div>
 
 <!-- ═══ WORLD EXAMPLES -->
-<div class="exchange-strip">
+<div class="exchange-strip" id="examples">
   <div class="exchange-strip-inner reveal">
     <span class="eyebrow">Real examples</span>
     <h2 class="section-title">This works across every world</h2>
@@ -1659,7 +1728,7 @@ footer {
 
 <!-- ═══ COMMUNITY -->
 <div class="divider"></div>
-<div class="community-section reveal">
+<div class="community-section reveal" id="community">
   <span class="eyebrow">What we're building toward</span>
   <h2 class="section-title">A constellation<br>of givers</h2>
   <p class="section-body">Everyone you see here earned their place by completing a real exchange. This is what the community looks like once it's alive.</p>
@@ -1712,7 +1781,7 @@ footer {
 
 <!-- ═══ ORIGIN STORY -->
 <div class="divider"></div>
-<div class="section reveal">
+<div class="section reveal" id="founders">
   <span class="eyebrow">How it began</span>
   <h2 class="section-title">Two people.<br>One exchange.<br>Everything.</h2>
 
@@ -1743,7 +1812,7 @@ footer {
 </div>
 
 <!-- ═══ MEMBERSHIP CARD -->
-<div class="card-strip">
+<div class="card-strip" id="card">
   <div class="card-inner reveal">
     <span class="eyebrow">Your place, in your hand</span>
     <h2 class="section-title">A card that's<br>only yours.</h2>
@@ -1835,7 +1904,7 @@ footer {
 </div>
 
 <!-- ═══ PRINCIPLES -->
-<div class="principles-strip">
+<div class="principles-strip" id="principles">
   <div class="principles-inner reveal">
     <span class="eyebrow">What makes this different</span>
     <h2 class="section-title">Six things that<br>set the rules</h2>
@@ -1876,7 +1945,7 @@ footer {
 </div>
 
 <!-- ═══ CTA -->
-<div class="cta reveal">
+<div class="cta reveal" id="cta">
   <div class="cta-title">Build this with us.</div>
   <div class="cta-sub">We're building a community that can't be bought. Want in?</div>
   
@@ -2036,6 +2105,14 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
   if (e.key === 't' && e.target.tagName !== 'INPUT') toggleTheme();
 });
+
+// Navigation scroll
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
 
 // Enter key on waitlist email
 document.getElementById('waitlist-email').addEventListener('keydown', e => {
