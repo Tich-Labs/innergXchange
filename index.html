@@ -55,11 +55,11 @@ body {
 /* ─── THEME TOGGLE ─── */
 .theme-toggle {
   position: fixed;
-  top: 0.85rem;
-  right: 6rem;
-  z-index: 1001;
-  width: 36px;
-  height: 36px;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid rgba(196,168,130,0.25);
   background: rgba(42,32,24,0.8);
@@ -105,17 +105,13 @@ body {
   color: #1a1410;
 }
 
-.nav-links span {
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--mist);
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.nav-links span:hover {
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
   color: var(--cream);
+  cursor: pointer;
+  letter-spacing: 0.05em;
 }
 
 .nav-links {
@@ -124,31 +120,29 @@ body {
   align-items: center;
 }
 
-.nav-cta {
-  padding: 0.4rem 0.75rem;
-  border: 1px solid rgba(196,168,130,0.3);
-  border-radius: 4px;
+.nav-links a {
   font-size: 0.6rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--mist);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--cream);
+}
+
+.nav-cta {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(196,168,130,0.3);
+  border-radius: 4px;
 }
 
 .nav-cta:hover {
   background: var(--ember);
   border-color: var(--ember);
   color: var(--cream);
-}
-
-.nav-logo {
-  font-family: 'Fraunces', serif;
-  font-size: 1.1rem;
-  font-weight: 300;
-  color: var(--cream);
-  cursor: pointer;
-  letter-spacing: 0.05em;
 }
 
 [data-theme="light"] .theme-toggle {
@@ -1523,15 +1517,15 @@ footer {
 
 <!-- TOP NAV -->
 <nav class="top-nav">
-  <span class="nav-logo" onclick="scrollTo('hero')">innerG</span>
+  <div class="nav-logo" onclick="scrollTo('hero')">innerG</div>
   <div class="nav-links">
-    <span onclick="scrollTo('how-it-works')">How it works</span>
-    <span onclick="scrollTo('examples')">Examples</span>
-    <span onclick="scrollTo('community')">Community</span>
-    <span onclick="scrollTo('founders')">Founders</span>
-    <span onclick="scrollTo('card')">Card</span>
-    <span onclick="scrollTo('principles')">Rules</span>
-    <span onclick="scrollTo('cta')" class="nav-cta">Join</span>
+    <a onclick="scrollTo('how-it-works')">How it works</a>
+    <a onclick="scrollTo('examples')">Examples</a>
+    <a onclick="scrollTo('community')">Community</a>
+    <a onclick="scrollTo('founders')">Founders</a>
+    <a onclick="scrollTo('card')">Card</a>
+    <a onclick="scrollTo('principles')">Rules</a>
+    <a onclick="scrollTo('cta')" class="nav-cta">Join</a>
   </div>
 </nav>
 
