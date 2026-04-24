@@ -1082,6 +1082,7 @@ body {
 .card-strip {
   background: var(--bark);
   padding: 5rem 2rem;
+  min-height: 100vh;
 }
 
 .card-inner {
@@ -1095,12 +1096,16 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto;
+  max-height: 100vh;
+  padding-bottom: 2rem;
+}
   gap: 1rem;
 }
 
 .membership-card {
-  width: 340px;
-  height: 214px;
+  width: 320px;
+  height: 200px;
   background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 60%, #2a2a2a 100%);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 16px;
