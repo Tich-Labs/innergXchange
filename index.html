@@ -468,7 +468,7 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(to right, var(--ember), var(--sun), transparent);
+  background: linear-gradient(to right, var(--ember), transparent);
 }
 
 .match-status {
@@ -883,6 +883,187 @@ body {
   font-size: 0.8rem;
   color: var(--mist);
   line-height: 1.7;
+}
+
+/* ─── FOUNDING STORY ─── */
+.founding-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: rgba(245,237,224,0.04);
+  margin: 2rem 0;
+}
+
+@media (max-width: 500px) { .founding-grid { grid-template-columns: 1fr; } }
+
+.founder {
+  background: var(--soil);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.founder:hover {
+  background: var(--warm);
+}
+
+.founder::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--ember), var(--sun));
+}
+
+.founder-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.founder-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+
+.founder-role {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.founder-offer {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--mist);
+}
+
+.founding-seal {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(245,237,224,0.03);
+  border: 1px solid rgba(196,168,130,0.1);
+  align-items: flex-start;
+}
+
+.founding-seal .seal-icon {
+  font-size: 1.2rem;
+  color: var(--sun);
+}
+
+.founding-seal .seal-text {
+  flex: 1;
+}
+
+.founding-seal .seal-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sand);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.founding-seal p {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--mist);
+  line-height: 1.6;
+}
+
+/* ─── COMPARISON ─── */
+.comparison-strip {
+  background: var(--bark);
+  padding: 5rem 2rem;
+}
+
+.comparison-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.comparison-table {
+  margin-top: 2rem;
+  border: 1px solid rgba(196,168,130,0.1);
+}
+
+.comp-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: rgba(196,168,130,0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.comp-row:hover {
+  background: rgba(196,168,130,0.05);
+}
+
+.comp-row.header {
+  background: transparent;
+  cursor: default;
+}
+
+.comp-row.header .comp-label,
+.comp-row.header .comp-other,
+.comp-row.header .comp-us {
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--whisper);
+  padding: 1rem;
+}
+
+.comp-label {
+  background: var(--soil);
+  padding: 1rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.comp-other, .comp-us {
+  padding: 1rem;
+  font-size: 0.75rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comp-other {
+  background: var(--bark);
+  color: var(--whisper);
+}
+
+.comp-us {
+  background: rgba(212,98,42,0.1);
+  color: var(--sun);
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .comp-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .comp-label {
+    grid-column: span 2;
+    background: transparent;
+    padding-bottom: 0;
+  }
+  .comp-other, .comp-us {
+    padding: 0.75rem;
+  }
 }
 
 /* ─── CTA ─── */
@@ -1370,6 +1551,85 @@ footer {
   </div>
 </div>
 
+<!-- ═══ ORIGIN STORY -->
+<div class="divider"></div>
+<div class="section reveal">
+  <span class="eyebrow">How it began</span>
+  <h2 class="section-title">Two people.<br>One exchange.<br>Everything.</h2>
+
+  <p class="section-body">The community wasn't built from a form. It started with one real exchange between two people who believed something different was possible.</p>
+
+  <div class="founding-grid">
+    <div class="founder" onclick="showFounderDetail('The Voice')">
+      <div class="founder-icon">✦</div>
+      <div class="founder-name">The Voice</div>
+      <div class="founder-role">Origin community node</div>
+      <div class="founder-offer">Wellness · Grounding · The first word</div>
+    </div>
+    <div class="founder" onclick="showFounderDetail('The Builder')">
+      <div class="founder-icon">⚒</div>
+      <div class="founder-name">The Builder</div>
+      <div class="founder-role">Platform creator</div>
+      <div class="founder-offer">Code · Infrastructure · The first build</div>
+    </div>
+  </div>
+
+  <div class="founding-seal">
+    <div class="seal-icon">◈</div>
+    <div class="seal-text">
+      <span class="seal-label">The first exchange</span>
+      <p>The Builder received community access in exchange for building the app. It's the first sealed record in the system — pinned always in the constellation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPARISON -->
+<div class="comparison-strip">
+  <div class="comparison-inner reveal">
+    <span class="eyebrow">Why this works</span>
+    <h2 class="section-title">Not a marketplace.<br>A movement.</h2>
+
+    <div class="comparison-table">
+      <div class="comp-row header">
+        <div class="comp-label"></div>
+        <div class="comp-other">Bunz</div>
+        <div class="comp-other">TimeRepublik</div>
+        <div class="comp-us">innerG·X·change</div>
+      </div>
+      <div class="comp-row" onclick="showCompDetail(0)">
+        <div class="comp-label">No money inside</div>
+        <div class="comp-other">BTZ currency</div>
+        <div class="comp-other">Time credits</div>
+        <div class="comp-us">Total</div>
+      </div>
+      <div class="comp-row" onclick="showCompDetail(1)">
+        <div class="comp-label">Earned entry</div>
+        <div class="comp-other">Sign up</div>
+        <div class="comp-other">Sign up</div>
+        <div class="comp-us">First exchange</div>
+      </div>
+      <div class="comp-row" onclick="showCompDetail(2)">
+        <div class="comp-label">One match at a time</div>
+        <div class="comp-other">Browse all</div>
+        <div class="comp-other">Browse all</div>
+        <div class="comp-us">You receive one</div>
+      </div>
+      <div class="comp-row" onclick="showCompDetail(3)">
+        <div class="comp-label">No ratings</div>
+        <div class="comp-other">Stars</div>
+        <div class="comp-other">Stars</div>
+        <div class="comp-us">Confirmation only</div>
+      </div>
+      <div class="comp-row" onclick="showCompDetail(4)">
+        <div class="comp-label">Physical card</div>
+        <div class="comp-other">No</div>
+        <div class="comp-other">No</div>
+        <div class="comp-us">Yes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ PRINCIPLES -->
 <div class="principles-strip">
   <div class="principles-inner reveal">
@@ -1505,6 +1765,26 @@ function showSealDetail() {
 
 function showPendingDetail() {
   showModal('New Members', 'These future members are currently completing their first exchange. Once confirmed, they\'ll join the community and appear as full members with their offers and needs visible.');
+}
+
+function showFounderDetail(name) {
+  if (name === 'The Voice') {
+    showModal('The Voice', 'The origin node. The first person to trust the vision. Holds the community\'s energy and intention. When we\'re lost, she lights the way.');
+  } else {
+    showModal('The Builder', 'Built the platform with their own hands. Received community access in exchange for the work. Every member carries a piece of what they started.');
+  }
+}
+
+function showCompDetail(index) {
+  const details = [
+    'No currency Inside. Not BTZ, not time credits, not anything that can be bought. What you give Is the currency.',
+    'You can\'t join by signing up. You can only join by giving first. One real exchange. That\'s the ritual.',
+    'No browsing. No list of 47 people. You receive exactly one person whose offer meets your need. Commit or pass.',
+    'No stars. No thumbs up. No review anxiety. Just confirmation: it happened. That\'s all we keep.',
+    'Every member gets a physical membership card with their sigil. A real thing in your hand. Not just a profile.'
+  ];
+  const labels = ['No money', 'Earned entry', 'One match', 'No ratings', 'Physical card'];
+  showModal(labels[index], details[index]);
 }
 
 function showPrincipleDetail(index) {
