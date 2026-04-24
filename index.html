@@ -133,6 +133,10 @@ body {
   color: var(--cream);
 }
 
+.nav-links a.nav-active {
+  color: var(--sun);
+}
+
 .nav-cta {
   padding: 0.4rem 0.75rem;
   border: 1px solid rgba(196,168,130,0.3);
@@ -1517,15 +1521,15 @@ footer {
 
 <!-- TOP NAV -->
 <nav class="top-nav">
-  <div class="nav-logo" onclick="scrollTo('hero')">innerG</div>
+  <div class="nav-logo" onclick="scrollToSection('hero')">innerG</div>
   <div class="nav-links">
-    <a onclick="scrollTo('how-it-works')">How it works</a>
-    <a onclick="scrollTo('examples')">Examples</a>
-    <a onclick="scrollTo('community')">Community</a>
-    <a onclick="scrollTo('founders')">Founders</a>
-    <a onclick="scrollTo('card')">Card</a>
-    <a onclick="scrollTo('principles')">Rules</a>
-    <a onclick="scrollTo('cta')" class="nav-cta">Join</a>
+    <a onclick="scrollToSection('how-it-works')" data-section="how-it-works">How it works</a>
+    <a onclick="scrollToSection('examples')" data-section="examples">Examples</a>
+    <a onclick="scrollToSection('community')" data-section="community">Community</a>
+    <a onclick="scrollToSection('founders')" data-section="founders">Founders</a>
+    <a onclick="scrollToSection('card')" data-section="card">Card</a>
+    <a onclick="scrollToSection('principles')" data-section="principles">Rules</a>
+    <a onclick="scrollToSection('cta')" class="nav-cta">Join</a>
   </div>
 </nav>
 
@@ -2123,12 +2127,34 @@ document.addEventListener('keydown', e => {
 });
 
 // Navigation scroll
-function scrollTo(id) {
+function scrollToSection(id) {
   const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (!el) return;
+  const navHeight = document.querySelector('.top-nav').offsetHeight;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight;
+  window.scrollTo({ top, behavior: 'smooth' });
 }
+
+// Nav active state — highlight the link for the section currently in view
+(function () {
+  const navSections = ['how-it-works', 'examples', 'community', 'founders', 'card', 'principles', 'cta'];
+  const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.toggle('nav-active', link.dataset.section === entry.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  navSections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObserver.observe(el);
+  });
+}());
 
 // Enter key on waitlist email
 document.getElementById('waitlist-email').addEventListener('keydown', e => {
