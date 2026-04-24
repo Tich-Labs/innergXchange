@@ -1270,6 +1270,172 @@ body {
   font-style: italic;
 }
 
+/* ─── FORUM ─── */
+.forum-strip {
+  background: var(--bark);
+  padding: 5rem 2rem;
+}
+
+.forum-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.board-tabs {
+  display: flex;
+  gap: 2px;
+  background: rgba(245,237,224,0.04);
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+
+.board-tab {
+  flex: 1;
+  min-width: 130px;
+  padding: 0.75rem 1rem;
+  background: var(--soil);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--whisper);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.board-tab:hover { background: var(--warm); color: var(--mist); }
+
+.board-tab.active { color: var(--cream); background: var(--warm); }
+.board-tab.active[data-board="wellness"]       { border-bottom: 2px solid var(--green); }
+.board-tab.active[data-board="entrepreneurship"]{ border-bottom: 2px solid var(--sun); }
+.board-tab.active[data-board="conscious"]      { border-bottom: 2px solid var(--teal); }
+.board-tab.active[data-board="creative"]       { border-bottom: 2px solid var(--rose); }
+
+.board-posts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(245,237,224,0.04);
+}
+
+@media (max-width: 620px) { .board-posts { grid-template-columns: 1fr; } }
+
+.forum-post {
+  background: var(--soil);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  transition: background 0.25s;
+  position: relative;
+}
+
+.forum-post::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.forum-post.w-wellness::before       { background: linear-gradient(to right, var(--green), transparent); }
+.forum-post.w-entrepreneurship::before { background: linear-gradient(to right, var(--sun), transparent); }
+.forum-post.w-conscious::before      { background: linear-gradient(to right, var(--teal), transparent); }
+.forum-post.w-creative::before       { background: linear-gradient(to right, var(--rose), transparent); }
+
+.forum-post:hover { background: var(--warm); }
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.post-author {
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--sand);
+  font-weight: 400;
+}
+
+.post-world-tag {
+  font-size: 0.45rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+}
+
+.post-world-tag.wellness       { color: var(--green); border: 1px solid rgba(90,138,90,0.3); }
+.post-world-tag.entrepreneurship{ color: var(--sun); border: 1px solid rgba(232,201,122,0.3); }
+.post-world-tag.conscious      { color: var(--teal); border: 1px solid rgba(74,138,128,0.3); }
+.post-world-tag.creative       { color: var(--rose); border: 1px solid rgba(196,106,106,0.3); }
+
+.post-body {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 0.95rem;
+  color: var(--mist);
+  line-height: 1.7;
+}
+
+.post-reactions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.reaction {
+  font-size: 1rem;
+  opacity: 0.3;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  user-select: none;
+}
+
+.reaction:hover { opacity: 1; transform: scale(1.2); }
+.reaction.active { opacity: 0.85; }
+
+.forum-lock {
+  margin-top: 2px;
+  padding: 1.25rem 1.75rem;
+  background: var(--soil);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.forum-lock-icon { font-size: 1rem; opacity: 0.35; flex-shrink: 0; }
+
+.forum-lock-text {
+  font-size: 0.75rem;
+  color: var(--whisper);
+  line-height: 1.6;
+}
+
+.forum-lock-text strong { color: var(--sand); font-weight: 400; }
+
+.mod-note {
+  margin-top: 2rem;
+  padding: 1.25rem 1.75rem;
+  border: 1px solid rgba(245,237,224,0.06);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.mod-note-icon { font-size: 1rem; opacity: 0.4; padding-top: 2px; flex-shrink: 0; }
+
+.mod-note-text {
+  font-size: 0.8rem;
+  color: var(--whisper);
+  line-height: 1.7;
+}
+
+.mod-note-text strong { color: var(--sand); font-weight: 400; display: block; margin-bottom: 0.2rem; }
+
 /* ─── COMPARISON ─── */
 .comparison-strip {
   background: var(--bark);
@@ -1574,12 +1740,13 @@ footer {
 <nav class="top-nav">
   <div class="nav-logo" onclick="scrollToSection('hero')">innerG</div>
   <div class="nav-links">
-    <a onclick="scrollToSection('how-it-works')">How it works</a>
-    <a onclick="scrollToSection('examples')">Examples</a>
-    <a onclick="scrollToSection('community')">Community</a>
-    <a onclick="scrollToSection('founders')">Founders</a>
-    <a onclick="scrollToSection('card')">Card</a>
-    <a onclick="scrollToSection('principles')">Rules</a>
+    <a onclick="scrollToSection('how-it-works')" data-section="how-it-works">How it works</a>
+    <a onclick="scrollToSection('examples')" data-section="examples">Examples</a>
+    <a onclick="scrollToSection('community')" data-section="community">Community</a>
+    <a onclick="scrollToSection('forum')" data-section="forum">Forum</a>
+    <a onclick="scrollToSection('founders')" data-section="founders">Founders</a>
+    <a onclick="scrollToSection('card')" data-section="card">Card</a>
+    <a onclick="scrollToSection('principles')" data-section="principles">Rules</a>
     <span onclick="scrollToSection('cta')" class="nav-cta">Join</span>
     <button class="theme-toggle-mini" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
   </div>
@@ -1847,6 +2014,66 @@ footer {
       <div class="node-name">Zara H.</div>
       <div class="node-offer">Translation · 3 lang</div>
       <div class="node-badge">Member</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FORUM -->
+<div class="divider"></div>
+<div class="forum-strip" id="forum">
+  <div class="forum-inner reveal">
+    <span class="eyebrow">The conversation</span>
+    <h2 class="section-title">A forum only the<br><em>community</em> can enter</h2>
+    <p class="section-body">Four boards, one for each World. Members share, ask, offer — in words. No counts. No scores. Energy speaks for itself.</p>
+
+    <div class="board-tabs">
+      <button class="board-tab active" data-board="wellness"        onclick="switchBoard(this)">🌿 Wellness</button>
+      <button class="board-tab"        data-board="entrepreneurship" onclick="switchBoard(this)">◆ Entrepreneurship</button>
+      <button class="board-tab"        data-board="conscious"        onclick="switchBoard(this)">◈ Conscious Living</button>
+      <button class="board-tab"        data-board="creative"         onclick="switchBoard(this)">✦ Creative Life</button>
+    </div>
+
+    <div class="board-posts" id="board-posts">
+      <!-- Wellness posts (default) -->
+      <div class="forum-post w-wellness">
+        <div class="post-meta">
+          <span class="post-author">Miriam A.</span>
+          <span class="post-world-tag wellness">Wellness</span>
+        </div>
+        <div class="post-body">"Has anyone found a way to offer breathwork to someone who genuinely can't sit still? I've been working with a member who moves constantly and my usual approach isn't landing..."</div>
+        <div class="post-reactions">
+          <span class="reaction active" title="Resonates">🌱</span>
+          <span class="reaction" title="Sparks something">🔥</span>
+          <span class="reaction" title="I can help">🤝</span>
+        </div>
+      </div>
+      <div class="forum-post w-wellness">
+        <div class="post-meta">
+          <span class="post-author">Ife O.</span>
+          <span class="post-world-tag wellness">Wellness</span>
+        </div>
+        <div class="post-body">"Offering: one month of Tuesday meals in Nairobi — whole food, real kitchen. Looking for someone who can help me understand my nervous system. I cook, you teach."</div>
+        <div class="post-reactions">
+          <span class="reaction active" title="Resonates">🌱</span>
+          <span class="reaction active" title="Sparks something">🔥</span>
+          <span class="reaction" title="I can help">🤝</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="forum-lock">
+      <span class="forum-lock-icon">🔒</span>
+      <div class="forum-lock-text">
+        <strong>Visible only after your first exchange.</strong> The forum opens the moment both parties confirm. Until then, the conversation waits for you.
+      </div>
+    </div>
+
+    <div class="mod-note">
+      <span class="mod-note-icon">⚖</span>
+      <div class="mod-note-text">
+        <strong>The community holds itself</strong>
+        Members flag. Admins decide. Posts that diminish, extract, or perform superiority are removed. This space is earned — it stays that way.
+      </div>
     </div>
   </div>
 </div>
@@ -2179,12 +2406,69 @@ document.addEventListener('keydown', e => {
 });
 
 // Navigation scroll
-function scrollToSection(id) {
-  var el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+// Forum board switching
+const boardPosts = {
+  wellness: [
+    { author: 'Miriam A.', world: 'Wellness', worldKey: 'wellness', body: '"Has anyone found a way to offer breathwork to someone who genuinely can\'t sit still? I\'ve been working with a member who moves constantly and my usual approach isn\'t landing..."', reactions: [true, false, false] },
+    { author: 'Ife O.',    world: 'Wellness', worldKey: 'wellness', body: '"Offering: one month of Tuesday meals in Nairobi — whole food, real kitchen. Looking for someone who can help me understand my nervous system. I cook, you teach."', reactions: [true, true, false] }
+  ],
+  entrepreneurship: [
+    { author: 'Jomo W.',   world: 'Entrepreneurship', worldKey: 'entrepreneurship', body: '"I build things but I can\'t talk about them. If you know how to sell — genuinely sell, not perform — I have a van and free weekends for a month. Let\'s trade."', reactions: [false, true, true] },
+    { author: 'Zara H.',   world: 'Entrepreneurship', worldKey: 'entrepreneurship', body: '"Three years running my own practice. Happy to sit with anyone navigating the first year — the loneliness of it, the money fear, the identity questions. Just offering time."', reactions: [true, false, true] }
+  ],
+  conscious: [
+    { author: 'Kwame A.',  world: 'Conscious Living', worldKey: 'conscious', body: '"Seeking someone who knows permaculture. I have land outside Nairobi, good soil, no idea what to do with it. Can offer music lessons — guitar, voice, whatever you need."', reactions: [true, true, false] },
+    { author: 'Sól B.',    world: 'Conscious Living', worldKey: 'conscious', body: '"Does anyone have experience with natural building? Adobe, cob, anything. I\'m restoring a small structure on my property and I\'m completely out of my depth."', reactions: [false, false, true] }
+  ],
+  creative: [
+    { author: 'Zara H.',   world: 'Creative Life', worldKey: 'creative', body: '"I translate — Swahili, Kikuyu, English. Written or spoken. If you\'re creating something that needs to cross those languages, I\'m here. What can you offer in return?"', reactions: [true, false, false] },
+    { author: 'Miriam A.', world: 'Creative Life', worldKey: 'creative', body: '"Looking for someone to photograph the garden — before, during, and after. She would have loved it. In return: three weeks in Lisbon, that quiet room, the one near the water."', reactions: [true, true, true] }
+  ]
+};
+
+const reactionEmoji = ['🌱','🔥','🤝'];
+const reactionLabels = ['Resonates','Sparks something','I can help'];
+
+function switchBoard(tab) {
+  document.querySelectorAll('.board-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  const board = tab.dataset.board;
+  const posts = boardPosts[board];
+  const container = document.getElementById('board-posts');
+  container.innerHTML = posts.map(p => `
+    <div class="forum-post w-${p.worldKey}">
+      <div class="post-meta">
+        <span class="post-author">${p.author}</span>
+        <span class="post-world-tag ${p.worldKey}">${p.world}</span>
+      </div>
+      <div class="post-body">${p.body}</div>
+      <div class="post-reactions">
+        ${reactionEmoji.map((e, i) => `<span class="reaction${p.reactions[i] ? ' active' : ''}" title="${reactionLabels[i]}">${e}</span>`).join('')}
+      </div>
+    </div>`).join('');
 }
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const navHeight = document.querySelector('.top-nav').offsetHeight;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
+// Nav active state
+(function () {
+  const sections = ['how-it-works','examples','community','forum','founders','card','principles','cta'];
+  const links = document.querySelectorAll('.nav-links a[data-section]');
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.toggle('nav-active', l.dataset.section === entry.target.id));
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(id => { const el = document.getElementById(id); if (el) sectionObs.observe(el); });
+}());
 
 // Enter key on waitlist email
 document.getElementById('waitlist-email').addEventListener('keydown', e => {

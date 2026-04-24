@@ -257,6 +257,102 @@ Verification page shows: member status, World, exchange count, member since
 
 ---
 
+## Forum & Moderation
+
+### Access Rule
+The forum is **members-only** — visible and writable only after a user's state reaches `community_member` (first exchange confirmed by both parties). Users in `declared` or `waiting_for_match` state see a locked placeholder: *"The conversation opens when your first exchange does."*
+
+### Structure — 4 World Boards
+Each World has its own board. Members choose which board to post in. Posts are not cross-posted.
+
+| Board | Colour accent |
+|---|---|
+| Wellness | `#5a8a5a` (green) |
+| Entrepreneurship | `#e8c97a` (sun/gold) |
+| Conscious Living | `#4a8a80` (teal) |
+| Creative Life | `#c46a6a` (rose) |
+
+### Post Model
+```
+posts
+  id (uuid)
+  user_id → users
+  world          # enum: wellness, entrepreneurship, conscious_living, creative_life
+  body           # plain text, max 800 chars — no markdown, no rich text at MVP
+  flagged        # boolean, default false
+  removed        # boolean, default false
+  created_at / updated_at
+
+reactions
+  id (uuid)
+  post_id → posts
+  user_id → users
+  kind           # enum: resonates (🌱), sparks (🔥), offering (🤝)
+  created_at
+  UNIQUE (post_id, user_id, kind)
+```
+
+### Energy Reactions
+Three symbolic reactions — no counts displayed publicly. A member can see which posts they've reacted to (their own state), but no aggregate number is shown to anyone. This removes performance metrics entirely.
+
+| Emoji | Key | Meaning |
+|---|---|---|
+| 🌱 | `resonates` | This landed with me |
+| 🔥 | `sparks` | This sparked something |
+| 🤝 | `offering` | I can help with this |
+
+**No upvote ranking.** Posts display chronologically within each board. No hot/trending/top logic.
+
+### Moderation Flow
+
+**Member flagging:**
+- Any member can flag a post with a reason (dropdown: harmful content / spam / off-world / misrepresents exchange)
+- Flagged posts are immediately dimmed (opacity reduced) for the flagger only — not removed yet
+- Flags are not visible to other members
+
+**Admin review:**
+- Admin dashboard shows a flagged-posts queue sorted by flag count
+- Admin actions: Remove post / Dismiss flag / Suspend member
+- All actions are logged with admin ID + timestamp
+
+**Auto-hide threshold:**
+- If a post receives 3+ flags from different members, it is auto-hidden (not removed) pending admin review
+- Auto-hidden posts show a placeholder: *"This post is under review."*
+
+**Removal:**
+- Only admins can permanently remove a post
+- Removed posts are soft-deleted (`removed: true`) — the record stays for admin audit
+- Member receives an email: *"A post you made has been removed. If you believe this was in error, reply to this email."*
+
+**Suspension:**
+- Admin can suspend a member directly from the flagged-posts queue
+- Suspended members cannot post, react, or view the forum
+- Their existing posts are hidden but not deleted
+
+### New DB Tables
+```
+posts          (see above)
+reactions      (see above)
+
+post_flags
+  id (uuid)
+  post_id → posts
+  reporter_id → users
+  reason         # enum: harmful / spam / off_world / misrepresents_exchange
+  resolved_at
+  created_at
+```
+
+### MVP+ Forum Features (Deferred)
+- Nested replies / threading
+- Member-to-member direct messages (forum-triggered)
+- Weekly digest email (top posts per World, opt-in)
+- Search within boards
+- Pin posts (admin only)
+- Forum moderation by trusted members (reputation-based)
+
+---
+
 ## Founding Exchange
 
 The founding exchange between The Voice and The Builder is displayed as a pinned record in the constellation — the first node. It demonstrates:
