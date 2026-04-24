@@ -56,9 +56,9 @@ Rationale: Manual curation doesn't scale past 100 members and creates an admin b
 The matching algorithm at MVP is: same World > complementary offer/need > geographic proximity (optional filter) > FIFO queue position. No recommendations engine. No ML. Pure Ruby.
 
 ### 2. Physical Card: PDF Only or Print-on-Demand?
-**Recommendation: Print-ready PDF download only for MVP.**
+**Decision: Both — PDF download AND print-on-demand (Gelato integration).**
 
-Rationale: Print-on-demand integration (Printful, Gelato) requires SKU setup, webhook handling, and international shipping logic that adds 3–4 weeks of scope. For MVP, a print-ready PDF at credit-card dimensions (3.5" × 2" at 300dpi) is immediately valuable and proves demand before committing to the fulfilment integration. Defer print-on-demand to MVP+.
+Rationale: PDF download is the fast path — ships in days, zero fulfilment dependency. Gelato integration is added in parallel: international coverage, no inventory, strong API. Both are MVP. Gelato is preferred over Printful for this product due to better international (African + European) fulfilment network, which matches the community's geographic spread.
 
 ### 3. Are the 4 Worlds Fixed Categories for MVP?
 **Recommendation: Yes — the 4 Worlds are fixed for MVP.**
@@ -219,7 +219,8 @@ Verification page shows: member status, World, exchange count, member since
 - Virtual card display on profile
 - PNG download
 - Print-ready PDF download (credit-card dimensions, 300dpi)
-- Public verification page (/verify/:token, no login required)
+- Member-gated verification page (/verify/:token — login required to view)
+- Print-on-demand physical card via Gelato API (order from profile)
 
 **Admin**
 - Member list with states
@@ -237,7 +238,6 @@ Verification page shows: member status, World, exchange count, member since
 
 ### MVP+ Features (Next Phase)
 
-- Print-on-demand physical card (Printful / Gelato integration)
 - Real-time matching (replace daily batch with event-driven queue)
 - Sub-category tags within each World
 - Member-to-member community reporting
@@ -323,3 +323,539 @@ innerG·X·change has no revenue model inside the platform. That is intentional 
 | Members declare but never follow through | Medium | Medium | 72-hour window creates urgency; notification sequence |
 | Platform feels too esoteric for mass adoption | Low | Low | Not targeting mass adoption at MVP; targeting The Voice's specific audience |
 | Physical card demand exceeds PDF capacity | Low | Low | PDF is static file generation; scales trivially |
+
+---
+
+## Data Model
+
+### Core Tables
+
+```
+users
+  id (uuid)
+  email
+  password_digest
+  alias                  # Display name (can differ from legal name)
+  role                   # enum: member, admin
+  state                  # enum: declared, waiting_for_match, matched, community_member, suspended
+  world                  # enum: wellness, entrepreneurship, conscious_living, creative_life
+  secondary_world        # optional
+  offer_text             # Free text: what they give
+  need_text              # Free text: what they seek
+  location               # Free text (city, region, or "anywhere")
+  bio                    # Short optional text
+  exchange_count         # Denormalised counter
+  card_token             # UUID for public QR verification URL
+  card_generated_at
+  member_since           # Set when state transitions to community_member
+  founding_node          # boolean (The Voice, The Builder)
+  created_at / updated_at
+
+matches
+  id (uuid)
+  initiator_id → users
+  receiver_id  → users
+  state        # enum: pending, active, expired, confirmed, cancelled
+  expires_at   # 72 hours from assignment
+  initiated_at # When one party first messaged
+  created_at / updated_at
+
+exchanges
+  id (uuid)
+  match_id → matches
+  initiator_confirmed_at
+  receiver_confirmed_at
+  initiator_reflection   # Optional free text: what happened
+  receiver_reflection    # Optional free text: what happened
+  sealed_at              # Set when both confirm
+  created_at / updated_at
+
+messages
+  id (uuid)
+  match_id → matches
+  sender_id → users
+  body
+  read_at
+  created_at
+
+membership_cards
+  id (uuid)
+  user_id → users (unique)
+  sigil_svg              # Stored generated SVG string
+  qr_code_data           # Stored QR SVG or data URL
+  created_at / updated_at
+```
+
+### State Machine (User)
+
+```
+declared → waiting_for_match  (on profile submission)
+waiting_for_match → matched   (on match assignment by system/admin)
+matched → waiting_for_match   (on match expiry — 72h)
+matched → community_member    (on both parties confirming exchange)
+community_member → matched    (on new match assignment)
+any → suspended               (admin action)
+```
+
+---
+
+## Rails Tech Stack
+
+### Ruby / Rails Version
+- **Ruby 3.3+**
+- **Rails 8.0** — using built-in authentication (no Devise)
+
+### Key Gems
+
+```ruby
+# Auth
+# Rails 8 built-in auth (rails generate authentication)
+
+# Background Jobs
+gem "sidekiq"              # Match batch processing, expiry workers, email delivery
+gem "sidekiq-cron"        # Daily match run cron job
+
+# Email
+gem "postmark-rails"      # Transactional email — warm, deliverable
+
+# PDF Generation
+gem "prawn"               # Low-level PDF — gives full control over card layout
+gem "prawn-svg"           # Render the member's sigil SVG inside the PDF
+
+# QR Code
+gem "rqrcode"             # Generate QR codes as SVG or PNG
+
+# Image Export (PNG card download)
+gem "grover"              # Headless Chrome via Puppeteer — render card HTML to PNG
+# OR
+gem "vips"                # libvips — faster, lighter alternative for image compositing
+
+# Admin
+gem "administrate"        # Convention-first admin dashboard
+
+# State Machine
+gem "aasm"                # Member state transitions
+
+# Testing
+gem "rspec-rails"
+gem "factory_bot_rails"
+gem "capybara"
+
+# Utilities
+gem "pagy"                # Pagination (constellation grid)
+gem "noticed"             # Notifications (in-app + email)
+gem "image_processing"    # Active Storage variants
+```
+
+### Infrastructure
+- **Database:** PostgreSQL (UUID primary keys, good for card tokens)
+- **Storage:** Active Storage → S3 (for generated card PNG / PDF files)
+- **Cache / Queues:** Redis (Sidekiq backend)
+- **Email:** Postmark
+- **Hosting:** Fly.io or Render (Rails 8 deploy configs supported out of the box)
+
+---
+
+## Membership Card — Technical Specification
+
+### Card Dimensions
+- Virtual: 600px × 370px (standard business card ratio 1.618:1)
+- Print PDF: 3.5" × 2" at 300dpi (1050 × 600px) — bleed-safe with 0.125" margin
+
+### Card Visual Layout
+
+```
+┌─────────────────────────────────────────────────────┐
+│  ·  ·  ·  ·   [SIGIL — right side, 40% width]       │ ← Texture: warm grain
+│                                                      │
+│  innerG · X · change                                 │
+│                                                      │
+│  [ALIAS]                                             │
+│  [Primary World]                                     │
+│                                                      │
+│  [OFFER — short line, italic]                        │
+│                                                      │
+│  ─────────────────                                   │
+│  [n] exchanges  ·  member since [month year]         │
+│                                                      │
+│  [QR CODE — bottom right, 60px × 60px]               │
+└─────────────────────────────────────────────────────┘
+```
+
+### Sigil Algorithm (Ruby)
+
+The sigil is a deterministic constellation — a set of points connected by lines — seeded by the member's UUID.
+
+```ruby
+# app/concerns/sigil_generator.rb
+module SigilGenerator
+  VIEWBOX = 200
+  NUM_STARS = 8
+  NUM_LINES = 5
+
+  def self.generate(user_id)
+    seed = user_id.gsub("-", "").to_i(16) % (2**32)
+    rng  = Random.new(seed)
+
+    points = NUM_STARS.times.map do
+      x = rng.rand(20..180).round(1)
+      y = rng.rand(20..180).round(1)
+      r = rng.rand(1.2..3.0).round(1)
+      { x:, y:, r: }
+    end
+
+    # Deterministic line pairs (not random pairs — ensures reproducibility)
+    pairs = NUM_LINES.times.map do |i|
+      [i % NUM_STARS, (i + rng.rand(2..4)) % NUM_STARS]
+    end
+
+    build_svg(points, pairs)
+  end
+
+  def self.build_svg(points, pairs)
+    lines = pairs.map do |a, b|
+      pa, pb = points[a], points[b]
+      %(<line x1="#{pa[:x]}" y1="#{pa[:y]}" x2="#{pb[:x]}" y2="#{pb[:y]}" stroke="rgba(196,168,130,0.35)" stroke-width="0.5"/>)
+    end.join
+
+    stars = points.map do |p|
+      %(<circle cx="#{p[:x]}" cy="#{p[:y]}" r="#{p[:r]}" fill="rgba(196,168,130,0.7)"/>)
+    end.join
+
+    <<~SVG
+      <svg viewBox="0 0 #{VIEWBOX} #{VIEWBOX}" xmlns="http://www.w3.org/2000/svg">
+        #{lines}
+        #{stars}
+      </svg>
+    SVG
+  end
+end
+```
+
+### QR Code Generation
+
+```ruby
+# In MembershipCard model after_create callback
+def generate_qr
+  qr = RQRCode::QRCode.new(
+    Rails.application.routes.url_helpers.verify_url(user.card_token),
+    level: :m
+  )
+  self.qr_code_data = qr.as_svg(
+    color:          "c4a882",
+    shape_rendering: "crispEdges",
+    module_size:    3,
+    standalone:     true,
+    use_path:       true
+  )
+  save!
+end
+```
+
+### Card Verification Page — Members Only
+
+Route: `GET /verify/:token`  
+Controller: `VerificationsController#show` — **authentication required**  
+Access: any confirmed community member can view; non-members and logged-out users see a prompt to declare first
+
+Response: HTML page matching the brand aesthetic
+
+Displays (to verified members):
+- ✓ Verified member status + their sigil
+- World
+- Exchange count
+- Member since
+
+Does not display: email, location, offer/need text
+
+Rationale: keeping verification gated reinforces the community's exclusivity and prevents the member roster from being scraped. Scanning a card at an event becomes a moment of mutual recognition — both the scanner and the scannee are inside.
+
+### Print-on-Demand — Gelato Integration
+
+**Why Gelato over Printful:** Better fulfilment coverage across Africa (Kenya, Nigeria, South Africa) and Europe — matching where the founding community lives. No inventory. Cards printed locally to the member's location.
+
+**Flow:**
+
+```
+Member clicks "Order my card" on /card
+    ↓
+CardOrdersController#create
+    ↓
+GelateOrderService.call(user, shipping_address)
+    → POST https://order.gelatoapis.com/v4/orders
+    → Payload: product_uid (business card SKU), recipient, files: [card_pdf_url]
+    ↓
+Gelato returns order_id → stored on card_order record
+    ↓
+Gelato webhook (POST /webhooks/gelato) → update order status
+    ↓
+Email to member on dispatch
+```
+
+**Product UID:** `business_cards_14pt_glossy_4x4_2sided` (or equivalent Gelato business card SKU — confirm in Gelato dashboard)
+
+**Key Gelato API calls:**
+```ruby
+# app/services/gelato_order_service.rb
+class GelatoOrderService
+  API_URL = "https://order.gelatoapis.com/v4/orders"
+
+  def self.call(user, address)
+    payload = {
+      orderType: "order",
+      orderReferenceId: "card-#{user.id}",
+      customerReferenceId: user.id,
+      currency: "USD",
+      items: [{
+        itemReferenceId: "card-item-#{user.id}",
+        productUid: ENV["GELATO_CARD_PRODUCT_UID"],
+        files: [{ type: "default", url: card_pdf_url(user) }],
+        quantity: 10  # min order — member gets 10 cards
+      }],
+      shipmentMethodUid: "gelato_standard",
+      shippingAddress: {
+        firstName:   address[:first_name],
+        lastName:    address[:last_name],
+        addressLine1: address[:line1],
+        city:        address[:city],
+        country:     address[:country_code],
+        email:       user.email
+      }
+    }
+
+    response = HTTParty.post(API_URL,
+      headers: { "X-API-KEY" => ENV["GELATO_API_KEY"], "Content-Type" => "application/json" },
+      body: payload.to_json
+    )
+
+    response.parsed_response
+  end
+end
+```
+
+**New table:**
+```
+card_orders
+  id (uuid)
+  user_id → users
+  gelato_order_id
+  status          # enum: pending, accepted, printing, shipped, cancelled
+  shipping_address_json
+  quantity        # default 10
+  cost_cents      # what Gelato charges us
+  created_at / updated_at
+```
+
+**New gem:**
+```ruby
+gem "httparty"   # for Gelato API calls (or use Faraday if already present)
+```
+
+### PDF Generation (Prawn)
+
+```ruby
+# app/services/card_pdf_service.rb
+class CardPdfService
+  CARD_W = 252  # 3.5" at 72dpi for Prawn points; Prawn scales to 300dpi on output
+  CARD_H = 144  # 2.0" at 72dpi
+
+  def initialize(user)
+    @user = user
+    @card = user.membership_card
+  end
+
+  def generate
+    Prawn::Document.new(
+      page_size:   [CARD_W, CARD_H],
+      margin:      [9, 9, 9, 9],
+      background:  "1a1410"
+    ) do |pdf|
+      render_background(pdf)
+      render_wordmark(pdf)
+      render_member_info(pdf)
+      render_sigil(pdf)
+      render_qr(pdf)
+    end
+  end
+
+  private
+  # ... render methods
+end
+```
+
+---
+
+## Key Screens
+
+### 1. Declaration Form (`/declare`)
+- Minimal single-page form
+- Fields: alias, primary world (radio, 4 options with colour coding), offer (textarea), need (textarea), location (optional text), bio (optional)
+- CTA: "Submit your declaration"
+- State after submit: confirmation page — "You're in the queue. We'll find your match."
+
+### 2. Match Notification Email + In-App
+- Subject line: "Someone is ready to exchange with you."
+- Body: their alias, world, offer excerpt
+- 72-hour timer displayed
+- CTA: "Begin the exchange"
+
+### 3. Match Screen (`/match`)
+- Shows matched member's card: alias, world, offer, what they need
+- Timer countdown
+- "Initiate exchange" button → opens in-app message thread
+- "I'm not ready" → releases match (returns both to queue)
+
+### 4. Exchange Confirmation (`/exchange/:id/confirm`)
+- Simple screen: "Did this exchange happen?"
+- Two buttons: "Yes, it happened" / "It didn't happen"
+- Optional free-text reflection (not published — private record)
+- If both confirm: redirect to Arrival screen
+
+### 5. Arrival Screen
+- Full-screen moment: "You've arrived."
+- Shows their generated card for the first time
+- Card download options (PNG, PDF)
+- "Enter the constellation" CTA
+
+### 6. Constellation (`/community`)
+- Grid of member nodes (avatar/icon, alias, world, offer snippet)
+- Filter bar: World / location
+- Click node → member profile
+
+### 7. Member Profile (`/members/:id`)
+- Public-facing (to other community members only)
+- Shows: alias, world, offer, exchange count, member since
+- Their sigil (large)
+- "Request exchange" button (if you're a member)
+
+### 8. My Card (`/card`)
+- Virtual card display (animated shimmer border on hover)
+- Download PNG button
+- Download print-ready PDF button
+- "Share your card" — copies public verification URL
+
+### 9. Admin Dashboard (`/admin`)
+- Members table: state, world, declaration date
+- Matches table: pair, state, expiry, actions (override, release)
+- Exchange log: sealed exchanges, reflection snippets
+- Suspension controls
+
+---
+
+## Brand & Design System
+
+### Palette (from v3 landing page)
+```css
+--soil:    #1a1410;   /* Page background */
+--bark:    #2a2018;   /* Card / panel backgrounds */
+--warm:    #3a2e20;   /* Hover states */
+--sand:    #c4a882;   /* Body text accent, borders */
+--sun:     #e8c97a;   /* Primary accent, italic highlights */
+--ember:   #d4622a;   /* CTA, status indicators */
+--green:   #5a8a5a;   /* Wellness world */
+--teal:    #4a8a80;   /* Conscious Living world */
+--rose:    #c46a6a;   /* Creative Life world */
+--cream:   #f5ede0;   /* Primary text */
+```
+
+### Typography
+- **Headings:** Fraunces, weight 200–300, italic for emphasis
+- **Body:** DM Sans, weight 300–400
+- **Labels / eyebrows:** DM Sans, 0.55–0.65rem, letter-spacing 0.3–0.4em, uppercase
+- Google Fonts: `Fraunces:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400` + `DM+Sans:wght@300;400;500`
+
+### World Colour Mapping
+| World | Colour | Hex |
+|---|---|---|
+| Wellness | Green | #5a8a5a |
+| Entrepreneurship | Sun / Gold | #e8c97a |
+| Conscious Living | Teal | #4a8a80 |
+| Creative Life | Rose | #c46a6a |
+
+### Interaction Principles
+- No custom cursor in the app (keep cursor:default — the cosmic cursor is landing page only)
+- Transitions: 0.3s ease for hover states, 0.8s ease for scroll reveals
+- No drop shadows — use border and background gradient instead
+- Confirmation moments (arrival, card reveal) use full-screen overlays with a slow fade
+
+---
+
+## Launch Plan
+
+### Phase 0 — Closed Beta (Weeks 1–4)
+- The Voice sends invitations to ~50 handpicked members from their community
+- Builder is admin; matches are curated manually in this phase
+- Goal: 20 confirmed exchanges, 20 community members, 20 cards generated
+- Gather qualitative feedback on the declaration form, match quality, confirmation flow
+
+### Phase 1 — Invite Wave (Weeks 5–10)
+- Each member can invite 2 people (referral via unique link, not public)
+- Algorithm matching goes live (replaces manual)
+- Goal: 150 declarations, 80 confirmed exchanges
+- Card downloads begin; QR verification page live
+
+### Phase 2 — Open Declaration (Weeks 11–20)
+- Public landing page goes live with "Begin your declaration" CTA
+- No invite required to declare — but you still can't see the community until you exchange
+- Goal: 500 declarations, 200+ community members
+- Optional arrival donation prompt A/B tested
+
+---
+
+## Project File Structure (Rails)
+
+```
+app/
+  controllers/
+    declarations_controller.rb
+    matches_controller.rb
+    exchanges_controller.rb
+    cards_controller.rb
+    verifications_controller.rb   ← public, no auth
+    community_controller.rb
+    admin/
+      base_controller.rb
+      members_controller.rb
+      matches_controller.rb
+      exchanges_controller.rb
+  models/
+    user.rb
+    match.rb
+    exchange.rb
+    message.rb
+    membership_card.rb
+  concerns/
+    sigil_generator.rb
+  services/
+    matching_service.rb           ← daily batch algorithm
+    card_pdf_service.rb
+    card_png_service.rb
+  jobs/
+    run_matching_job.rb           ← Sidekiq + sidekiq-cron (daily)
+    expire_matches_job.rb         ← Sidekiq, run every hour
+    generate_card_job.rb          ← after exchange sealed
+  views/
+    declarations/
+    matches/
+    exchanges/
+    cards/
+    verifications/
+    community/
+    admin/
+  mailers/
+    match_mailer.rb
+    exchange_mailer.rb
+    arrival_mailer.rb
+```
+
+---
+
+## CLAUDE.md Setup Note
+
+When initialising this Rails project, add a `CLAUDE.md` in the project root with:
+- The 4 Worlds as fixed constants (no adding new categories without product decision)
+- The "No money inside" rule — flag any Stripe/payment gem additions immediately
+- The "No ratings" rule — no stars, no numeric scores anywhere in the UI
+- Card token must always be UUID — never expose user ID in QR URL
+- Sigil algorithm is deterministic — the same member ID must always produce the same SVG
+- Admin overrides are logged — every manual match intervention creates an audit record

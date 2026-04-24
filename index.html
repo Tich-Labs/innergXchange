@@ -1415,7 +1415,7 @@ document.querySelectorAll('.reveal, .step').forEach(el => obs.observe(el));
 // Modal functions
 function showModal(title, text) {
   document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-text').textContent = text;
+  document.getElementById('modal-text').innerHTML = text;
   document.getElementById('modal').classList.add('active');
 }
 
