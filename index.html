@@ -149,6 +149,27 @@ body {
   color: var(--cream);
 }
 
+.theme-toggle-mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(196,168,130,0.3);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  color: var(--sand);
+}
+
+.theme-toggle-mini:hover {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--cream);
+}
+
 [data-theme="light"] .theme-toggle {
   background: rgba(248,245,239,0.8);
   border-color: rgba(107,93,74,0.25);
@@ -1516,20 +1537,18 @@ footer {
 </head>
 <body>
 
-<!-- THEME TOGGLE -->
-<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
-
 <!-- TOP NAV -->
 <nav class="top-nav">
   <div class="nav-logo" onclick="scrollToSection('hero')">innerG</div>
   <div class="nav-links">
-    <a onclick="scrollToSection('how-it-works')" data-section="how-it-works">How it works</a>
-    <a onclick="scrollToSection('examples')" data-section="examples">Examples</a>
-    <a onclick="scrollToSection('community')" data-section="community">Community</a>
-    <a onclick="scrollToSection('founders')" data-section="founders">Founders</a>
-    <a onclick="scrollToSection('card')" data-section="card">Card</a>
-    <a onclick="scrollToSection('principles')" data-section="principles">Rules</a>
-    <a onclick="scrollToSection('cta')" class="nav-cta">Join</a>
+    <a onclick="scrollToSection('how-it-works')">How it works</a>
+    <a onclick="scrollToSection('examples')">Examples</a>
+    <a onclick="scrollToSection('community')">Community</a>
+    <a onclick="scrollToSection('founders')">Founders</a>
+    <a onclick="scrollToSection('card')">Card</a>
+    <a onclick="scrollToSection('principles')">Rules</a>
+    <span onclick="scrollToSection('cta')" class="nav-cta">Join</span>
+    <button class="theme-toggle-mini" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
   </div>
 </nav>
 
@@ -2128,33 +2147,11 @@ document.addEventListener('keydown', e => {
 
 // Navigation scroll
 function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const navHeight = document.querySelector('.top-nav').offsetHeight;
-  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight;
-  window.scrollTo({ top, behavior: 'smooth' });
+  var el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
-
-// Nav active state — highlight the link for the section currently in view
-(function () {
-  const navSections = ['how-it-works', 'examples', 'community', 'founders', 'card', 'principles', 'cta'];
-  const navLinks = document.querySelectorAll('.nav-links a[data-section]');
-
-  const sectionObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(link => {
-          link.classList.toggle('nav-active', link.dataset.section === entry.target.id);
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-
-  navSections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) sectionObserver.observe(el);
-  });
-}());
 
 // Enter key on waitlist email
 document.getElementById('waitlist-email').addEventListener('keydown', e => {
