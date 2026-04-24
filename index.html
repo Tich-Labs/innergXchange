@@ -738,11 +738,14 @@ body {
 
 .node-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2px;
   background: rgba(245,237,224,0.04);
   margin-top: 2rem;
 }
+
+@media (max-width: 800px) { .node-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .node-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .node {
   background: var(--soil);
@@ -753,6 +756,8 @@ body {
   transition: all 0.3s ease;
   position: relative;
   cursor: pointer;
+  text-align: center;
+  align-items: center;
 }
 
 .node:hover {
