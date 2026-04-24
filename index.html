@@ -84,9 +84,25 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 2rem;
-  background: rgba(26,20,16,0.9);
+  background: rgba(26,20,16,0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(196,168,130,0.08);
+  border-bottom: 1px solid rgba(196,168,130,0.1);
+}
+
+[data-theme="light"] .top-nav {
+  background: rgba(248,245,239,0.95);
+}
+
+[data-theme="light"] .nav-logo {
+  color: #1a1410;
+}
+
+[data-theme="light"] .nav-links a {
+  color: #6b5d4a;
+}
+
+[data-theme="light"] .nav-links a:hover {
+  color: #1a1410;
 }
 
 .nav-logo {
