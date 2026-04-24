@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>innerG·X·change</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --soil: #1a1410;
+  --bark: #2a2018;
+  --warm: #3a2e20;
+  --sand: #c4a882;
+  --sun: #e8c97a;
+  --ember: #d4622a;
+  --green: #5a8a5a;
+  --teal: #4a8a80;
+  --rose: #c46a6a;
+  --cream: #f5ede0;
+  --mist: rgba(245,237,224,0.55);
+  --whisper: rgba(245,237,224,0.3);
+  --bg: var(--soil);
+  --text: var(--cream);
+  --card-bg: var(--bark);
+}
+
+[data-theme="light"] {
+  --soil: #f8f5ef;
+  --bark: #ebe6dc;
+  --warm: #ddd8cd;
+  --sand: #6b5d4a;
+  --sun: #b8922a;
+  --ember: #c4552a;
+  --green: #4a704a;
+  --teal: #3a7068;
+  --rose: #a85050;
+  --cream: #1a1410;
+  --mist: rgba(26,20,16,0.55);
+  --whisper: rgba(26,20,16,0.3);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--soil);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  line-height: 1.6;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ─── THEME TOGGLE ─── */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(196,168,130,0.25);
+  background: rgba(42,32,24,0.8);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  color: var(--sand);
+}
+
+[data-theme="light"] .theme-toggle {
+  background: rgba(248,245,239,0.8);
+  border-color: rgba(107,93,74,0.25);
+}
+
+.theme-toggle:hover {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--cream);
+  transform: scale(1.08);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  color: #fff;
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem 8rem;
+  position: relative;
+  background: radial-gradient(ellipse at 50% 60%, rgba(212,98,42,0.12) 0%, transparent 65%);
+  transition: background 0.4s ease;
+}
+
+[data-theme="light"] .hero {
+  background: radial-gradient(ellipse at 50% 60%, rgba(212,98,42,0.08) 0%, transparent 65%);
+}
+
+.hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: up 0.8s ease 0.2s forwards;
+}
+
+.hero-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 200;
+  font-size: clamp(3.5rem, 11vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: up 0.9s ease 0.4s forwards;
+}
+
+.hero-title .x {
+  font-style: italic;
+  color: var(--sun);
+}
+
+.hero-line {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--mist);
+  max-width: 480px;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: up 1s ease 0.6s forwards;
+}
+
+.hero-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  max-width: 560px;
+  opacity: 0;
+  animation: up 1s ease 0.8s forwards;
+}
+
+.pill {
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(196,168,130,0.25);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  color: var(--sand);
+  background: rgba(196,168,130,0.06);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.pill:hover {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--whisper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: bob 3s ease-in-out infinite;
+  opacity: 0;
+  animation: bob 3s ease 1.5s infinite, up 1s ease 1.2s forwards;
+}
+
+@keyframes up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bob {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ─── DIVIDER ─── */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(196,168,130,0.15), transparent);
+  max-width: 800px;
+  margin: 0 auto;
+  transition: background 0.4s ease;
+}
+
+/* ─── SECTIONS ─── */
+.section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 7rem 2rem;
+}
+
+.section.wide { max-width: 1000px; }
+
+.eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 1.2rem;
+  display: block;
+}
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 200;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.01em;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--sun);
+}
+
+.section-body {
+  font-size: 1.05rem;
+  color: var(--mist);
+  max-width: 560px;
+  line-height: 1.8;
+  margin-bottom: 3.5rem;
+}
+
+/* ─── STEP FLOW ─── */
+.how-it-works {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.step.visible { opacity: 1; transform: none; }
+
+.step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(196,168,130,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  font-weight: 200;
+  color: var(--sand);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.step:hover .step-num {
+  border-color: var(--ember);
+  color: var(--ember);
+  background: rgba(212,98,42,0.1);
+}
+
+.step-thread {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(196,168,130,0.2), transparent);
+  margin-top: 0.5rem;
+  transition: background 0.4s ease;
+}
+
+.step:last-child .step-thread { display: none; }
+
+.step-content { padding-top: 0.4rem; }
+
+.step-heading {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.step:hover .step-heading {
+  color: var(--sun);
+}
+
+.step-heading em { font-style: italic; color: var(--sun); }
+
+.step-text {
+  font-size: 0.9rem;
+  color: var(--mist);
+  line-height: 1.8;
+  max-width: 480px;
+  transition: color 0.3s ease;
+}
+
+/* ─── EXCHANGE CARDS ─── */
+.exchange-strip {
+  background: var(--bark);
+  padding: 5rem 2rem;
+  transition: background 0.4s ease;
+}
+
+.exchange-strip-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.worlds {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: rgba(245,237,224,0.04);
+  border: 1px solid rgba(245,237,224,0.04);
+  margin-top: 2rem;
+}
+
+@media (max-width: 600px) { .worlds { grid-template-columns: 1fr; } }
+
+.world {
+  background: var(--soil);
+  padding: 2rem 1.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.world:hover {
+  background: var(--warm);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+
+.world-top {
+  height: 2px;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  transition: height 0.3s ease;
+}
+
+.world:hover .world-top {
+  height: 4px;
+}
+
+.world.w1 .world-top { background: linear-gradient(to right, var(--green), transparent); }
+.world.w2 .world-top { background: linear-gradient(to right, var(--sun), transparent); }
+.world.w3 .world-top { background: linear-gradient(to right, var(--teal), transparent); }
+.world.w4 .world-top { background: linear-gradient(to right, var(--rose), transparent); }
+
+.world-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.world.w1 .world-label { color: var(--green); }
+.world.w2 .world-label { color: var(--sun); }
+.world.w3 .world-label { color: var(--teal); }
+.world.w4 .world-label { color: var(--rose); }
+
+.ex {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ex-row {
+  padding: 0.85rem 1rem;
+  border-left: 2px solid;
+  transition: all 0.3s ease;
+}
+
+.world:hover .ex-row {
+  border-left-color: var(--ember);
+}
+
+.world.w1 .ex-row { border-color: rgba(90,138,90,0.35); }
+.world.w2 .ex-row { border-color: rgba(232,201,122,0.35); }
+.world.w3 .ex-row { border-color: rgba(74,138,128,0.35); }
+.world.w4 .ex-row { border-color: rgba(196,106,106,0.35); }
+
+.ex-row-label {
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--whisper);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.ex-row-text {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 0.95rem;
+  color: var(--cream);
+  line-height: 1.5;
+}
+
+/* ─── MATCH MOMENT ─── */
+.match-section {
+  background: radial-gradient(ellipse at center, rgba(212,98,42,0.08) 0%, transparent 60%);
+  transition: background 0.4s ease;
+}
+
+.match-card {
+  background: var(--bark);
+  border: 1px solid rgba(196,168,130,0.15);
+  padding: 2.5rem 2rem;
+  max-width: 520px;
+  position: relative;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.match-card:hover {
+  border-color: var(--ember);
+  box-shadow: 0 8px 32px rgba(212,98,42,0.15);
+}
+
+.match-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--ember), var(--sun), transparent);
+}
+
+.match-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 1.5rem;
+}
+
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ember);
+  animation: blink 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+.match-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.6rem;
+  margin-bottom: 0.35rem;
+  transition: color 0.3s ease;
+}
+
+.match-card:hover .match-name {
+  color: var(--sun);
+}
+
+.match-location {
+  font-size: 0.75rem;
+  color: var(--sand);
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.05em;
+}
+
+.match-what {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 1rem;
+  color: var(--mist);
+  line-height: 1.7;
+  padding: 1.25rem;
+  border: 1px solid rgba(245,237,224,0.07);
+  background: rgba(245,237,224,0.03);
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.match-card:hover .match-what {
+  border-color: rgba(212,98,42,0.2);
+}
+
+.match-timer {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.timer-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--whisper);
+}
+
+.timer-val {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.3rem;
+  color: var(--sun);
+  letter-spacing: 0.1em;
+}
+
+.match-note {
+  font-size: 0.75rem;
+  color: var(--whisper);
+  margin-top: 1.25rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ─── EXCHANGE HAPPENS ─── */
+.exchange-happens {
+  background: var(--bark);
+  padding: 5rem 2rem;
+  transition: background 0.4s ease;
+}
+
+.exchange-happens-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.swap {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-top: 2rem;
+}
+
+@media (max-width: 560px) {
+  .swap { grid-template-columns: 1fr; }
+  .swap-arrow { transform: rotate(90deg); margin: 0.5rem auto; }
+}
+
+.swap-side {
+  background: var(--soil);
+  padding: 2rem 1.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.swap-side:hover {
+  background: var(--warm);
+  transform: translateY(-4px);
+}
+
+.swap-side.left { border-right: none; }
+.swap-side.right { border-left: none; }
+
+.swap-side::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  transition: height 0.3s ease;
+}
+
+.swap-side:hover::before {
+  height: 4px;
+}
+
+.swap-side.left::before { background: linear-gradient(to right, var(--ember), transparent); }
+.swap-side.right::before { background: linear-gradient(to right, var(--teal), transparent); }
+
+.swap-role {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.swap-side.left .swap-role { color: var(--ember); }
+.swap-side.right .swap-role { color: var(--teal); }
+
+.swap-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.swap-loc {
+  font-size: 0.7rem;
+  color: var(--sand);
+  margin-bottom: 1.25rem;
+}
+
+.swap-gives {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 0.95rem;
+  color: var(--cream);
+  line-height: 1.65;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(245,237,224,0.06);
+}
+
+.swap-gets {
+  font-size: 0.8rem;
+  color: var(--whisper);
+  line-height: 1.7;
+}
+
+.swap-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--warm);
+  transition: background 0.3s ease;
+}
+
+.arrow-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.arr {
+  font-size: 0.85rem;
+  color: var(--sand);
+  opacity: 0.5;
+  animation: arr-pulse 3s ease-in-out infinite;
+}
+.arr:nth-child(2) { animation-delay: 1s; }
+
+@keyframes arr-pulse { 0%,100%{opacity:0.2} 50%{opacity:0.7} }
+
+.seal {
+  margin-top: 2rem;
+  padding: 1.75rem 2rem;
+  background: rgba(245,237,224,0.03);
+  border: 1px solid rgba(245,237,224,0.07);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.seal:hover {
+  border-color: var(--ember);
+  background: rgba(212,98,42,0.05);
+}
+
+.seal-icon {
+  font-size: 1.2rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+  padding-top: 2px;
+  transition: transform 0.3s ease;
+}
+
+.seal:hover .seal-icon {
+  transform: rotate(45deg);
+}
+
+.seal-text-wrap .seal-heading {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.seal-text-wrap p {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 0.95rem;
+  color: var(--mist);
+  line-height: 1.7;
+}
+
+/* ─── COMMUNITY ─── */
+.community-section {
+  padding: 7rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.node-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 2px;
+  background: rgba(245,237,224,0.04);
+  margin-top: 2rem;
+}
+
+.node {
+  background: var(--soil);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.node:hover {
+  background: var(--warm);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.node::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  transition: height 0.3s ease;
+}
+
+.node:hover::before {
+  height: 3px;
+}
+
+.node.you { background: rgba(212,98,42,0.08); }
+.node.you::before { background: linear-gradient(to right, var(--ember), transparent); }
+.node.matched::before { background: linear-gradient(to right, var(--sun), transparent); }
+.node.member::before { background: linear-gradient(to right, rgba(196,168,130,0.3), transparent); }
+.node.pending { opacity: 0.3; }
+
+.node-icon { font-size: 1.1rem; margin-bottom: 0.25rem; transition: transform 0.3s ease; }
+.node:hover .node-icon { transform: scale(1.2); }
+.node.you .node-icon { color: var(--sun); }
+
+.node-name {
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--cream);
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.node:hover .node-name {
+  color: var(--sun);
+}
+
+.node.you .node-name { color: var(--sun); }
+
+.node-offer {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 0.7rem;
+  color: var(--whisper);
+  line-height: 1.4;
+}
+
+.node-badge {
+  font-size: 0.45rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.node:hover .node-badge { color: var(--ember); }
+.node.you .node-badge { color: var(--ember); }
+.node.matched .node-badge { color: var(--sun); }
+.node.member .node-badge { color: rgba(196,168,130,0.4); }
+
+/* ─── PRINCIPLES ─── */
+.principles-strip {
+  background: var(--bark);
+  padding: 5rem 2rem;
+  transition: background 0.4s ease;
+}
+
+.principles-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.principles-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: rgba(245,237,224,0.04);
+  margin-top: 2rem;
+}
+
+@media (max-width: 700px) { .principles-list { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .principles-list { grid-template-columns: 1fr; } }
+
+.p {
+  background: var(--soil);
+  padding: 2rem 1.75rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.p:hover {
+  background: var(--warm);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.p:hover .p-icon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.p-icon { font-size: 1.2rem; margin-bottom: 1rem; display: block; opacity: 0.6; transition: transform 0.3s ease; }
+
+.p-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.p-body {
+  font-size: 0.8rem;
+  color: var(--mist);
+  line-height: 1.7;
+}
+
+/* ─── CTA ─── */
+.cta {
+  padding: 9rem 2rem;
+  text-align: center;
+  background: radial-gradient(ellipse at center, rgba(212,98,42,0.1) 0%, transparent 60%);
+  transition: background 0.4s ease;
+}
+
+.cta-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 200;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.cta-title em { font-style: italic; color: var(--sun); }
+
+.cta-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 1.15rem;
+  color: var(--mist);
+  margin-bottom: 3rem;
+}
+
+.btn {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 1.1rem 2.8rem;
+  border: 1px solid rgba(196,168,130,0.4);
+  color: var(--sand);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--cream);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(212,98,42,0.3);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--whisper);
+  border-top: 1px solid rgba(245,237,224,0.05);
+  transition: all 0.4s ease;
+}
+
+/* ─── SCROLL REVEAL ─── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 0.1s; }
+.reveal.d2 { transition-delay: 0.2s; }
+.reveal.d3 { transition-delay: 0.3s; }
+
+/* ─── MODAL ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,20,16,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: var(--bark);
+  border: 1px solid rgba(196,168,130,0.2);
+  padding: 2.5rem;
+  max-width: 420px;
+  margin: 1rem;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal {
+  transform: scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--whisper);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+  color: var(--ember);
+}
+
+.modal h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal p {
+  color: var(--mist);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.modal .btn {
+  width: 100%;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
+
+<!-- ═══ HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">A new kind of community</div>
+
+  <div class="hero-title">
+    inner<span class="x">G</span><br>X·change
+  </div>
+
+  <div class="hero-line">
+    Give something real.<br>Receive something real.<br>Then you're in.
+  </div>
+
+  <div class="hero-examples">
+    <span class="pill">A room for a skill</span>
+    <span class="pill">A meal for a lesson</span>
+    <span class="pill">A ride for some help</span>
+    <span class="pill">Care for care</span>
+    <span class="pill">Your hands for their space</span>
+    <span class="pill">Your voice for their time</span>
+  </div>
+
+  <div class="scroll-hint">scroll ↓</div>
+</div>
+
+<!-- ═══ HOW IT WORKS -->
+<div class="divider"></div>
+<div class="section reveal">
+  <span class="eyebrow">How it works</span>
+  <h2 class="section-title">Four steps.<br>No money involved.</h2>
+  <p class="section-body">Anyone can join a group. But you can only join this one by completing a real exchange with a real person first.</p>
+
+  <div class="how-it-works">
+
+    <div class="step reveal d1">
+      <div class="step-left">
+        <div class="step-num">1</div>
+        <div class="step-thread"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-heading">Tell us what you <em>offer</em> and what you <em>need</em></div>
+        <p class="step-text">Not a profile. Two simple things: what you're genuinely ready to give — your time, your skill, your space, your hands — and what you're genuinely looking for in return.</p>
+      </div>
+    </div>
+
+    <div class="step reveal d2">
+      <div class="step-left">
+        <div class="step-num">2</div>
+        <div class="step-thread"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-heading">We find you <em>one person</em></div>
+        <p class="step-text">Not a list. Not a marketplace. One person whose offer matches your need, and whose need matches your offer. You don't browse. You receive a match.</p>
+      </div>
+    </div>
+
+    <div class="step reveal d3">
+      <div class="step-left">
+        <div class="step-num">3</div>
+        <div class="step-thread"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-heading">You <em>exchange</em></div>
+        <p class="step-text">Both of you give. Both of you receive. After it happens, you each confirm it was real. That's it. No rating. No review. Just: did it happen?</p>
+      </div>
+    </div>
+
+    <div class="step reveal">
+      <div class="step-left">
+        <div class="step-num">4</div>
+      </div>
+      <div class="step-content">
+        <div class="step-heading">Now you're <em>inside</em></div>
+        <p class="step-text">The community is made up only of people who have already exchanged. You can see what others offer and need. You can exchange again and again. Your place here is earned — and it grows.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ WORLD EXAMPLES -->
+<div class="exchange-strip">
+  <div class="exchange-strip-inner reveal">
+    <span class="eyebrow">Real examples</span>
+    <h2 class="section-title">This works across every world</h2>
+    <p class="section-body">Wellness, business, conscious living, creative life — the exchange can be anything that's genuinely useful to another person.</p>
+
+    <div class="worlds">
+      <div class="world w1" onclick="showNodeDetail('Miriam', 'Wellness', 'Weekly breathwork', 'Quiet room for two weeks')">
+        <div class="world-top"></div>
+        <span class="world-label">Wellness</span>
+        <div class="ex">
+          <div class="ex-row">
+            <span class="ex-row-label">Offers</span>
+            <div class="ex-row-text">Weekly breathwork sessions online, for someone going through a hard time.</div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-row-label">Looking for</span>
+            <div class="ex-row-text">Somewhere quiet to stay for two weeks while she finishes her book.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="world w2" onclick="showNodeDetail('Jomo', 'Entrepreneurship', 'Van & weekends', 'Sales skill')">
+        <div class="world-top"></div>
+        <span class="world-label">Entrepreneurship</span>
+        <div class="ex">
+          <div class="ex-row">
+            <span class="ex-row-label">Offers</span>
+            <div class="ex-row-text">His van and free weekends. Can move you, run supplies, whatever you need.</div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-row-label">Looking for</span>
+            <div class="ex-row-text">Someone to teach him how to sell. He builds things but can't talk about them.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="world w3" onclick="showNodeDetail('Ife', 'Conscious Living', 'Cooking Tuesday', 'Company while healing')">
+        <div class="world-top"></div>
+        <span class="world-label">Conscious Living</span>
+        <div class="ex">
+          <div class="ex-row">
+            <span class="ex-row-label">Offers</span>
+            <div class="ex-row-text">Cooks. Properly. Tuesday evenings in Nairobi. Will feed you and yours.</div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-row-label">Looking for</span>
+            <div class="ex-row-text">Someone to sit with her one afternoon a week. She's healing. Needs company.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="world w4" onclick="showNodeDetail('Zara', 'Creative Life', 'Translation', 'Roof repair')">
+        <div class="world-top"></div>
+        <span class="world-label">Creative Life</span>
+        <div class="ex">
+          <div class="ex-row">
+            <span class="ex-row-label">Offers</span>
+            <div class="ex-row-text">Translation — Swahili, Kikuyu, English. Written or spoken. Real human help.</div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-row-label">Looking for</span>
+            <div class="ex-row-text">Someone who can fix a roof before the rains come. Same spot, three years.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ THE MATCH -->
+<div class="divider"></div>
+<div class="section match-section reveal">
+  <span class="eyebrow">Step 2 in detail</span>
+  <h2 class="section-title">What a match<br>looks like</h2>
+  <p class="section-body">You don't choose from a list. You receive one person. Here's what that moment feels like.</p>
+
+  <div class="match-card" onclick="showMatchDetail()">
+    <div class="match-status"><div class="status-dot"></div>Match found</div>
+    <div class="match-name">Miriam A.</div>
+    <div class="match-location">Lisbon, Portugal &nbsp;·&nbsp; Wellness community</div>
+    <div class="match-what">
+      She has a quiet room near the water available for three weeks — and she needs someone who knows how to work a garden. Her mother's. The rains are coming.
+    </div>
+    <div class="match-timer">
+      <span class="timer-label">Time to reach out</span>
+      <span class="timer-val" id="timer">71:59:42</span>
+    </div>
+    <div class="match-note">You have 72 hours to initiate the exchange. If neither of you moves, the match releases and you'll receive another when you're ready.</div>
+  </div>
+</div>
+
+<!-- ═══ THE EXCHANGE -->
+<div class="exchange-happens">
+  <div class="exchange-happens-inner reveal">
+    <span class="eyebrow">Step 3 in detail</span>
+    <h2 class="section-title">What the exchange<br>looks like</h2>
+    <p class="section-body">Both people give. Both people receive. The app holds the space. The humans do the rest.</p>
+
+    <div class="swap">
+      <div class="swap-side left" onclick="showNodeDetail('Miriam', 'Host', 'Room near water', 'Garden work')">
+        <span class="swap-role">She gives</span>
+        <div class="swap-name">Miriam A.</div>
+        <div class="swap-loc">Lisbon · Wellness</div>
+        <div class="swap-gives">A quiet room near the water. Three weeks. Keys handed over on a Tuesday.</div>
+        <div class="swap-gets">She receives: her mother's garden tended. Soil turned. Something living again.</div>
+      </div>
+
+      <div class="swap-arrow">
+        <div class="arrow-inner">
+          <div class="arr">↑</div>
+          <div class="arr">↓</div>
+        </div>
+      </div>
+
+      <div class="swap-side right" onclick="showNodeDetail('You', 'Exchange', 'Garden work', 'Room in Europe')">
+        <span class="swap-role">You give</span>
+        <div class="swap-name">You</div>
+        <div class="swap-loc">Nairobi · Conscious Living</div>
+        <div class="swap-gives">Three weeks of work in the garden. Your hands and your patience.</div>
+        <div class="swap-gets">You receive: a place to stay in Europe. Space. A new person in your life.</div>
+      </div>
+    </div>
+
+    <div class="seal" onclick="showSealDetail()">
+      <div class="seal-icon">✦</div>
+      <div class="seal-text-wrap">
+        <span class="seal-heading">After it happens</span>
+        <p>Both of you confirm it was real. Not a rating — just a record. What happened. What it meant. That confirmation is what unlocks your place in the community.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMUNITY -->
+<div class="divider"></div>
+<div class="community-section reveal">
+  <span class="eyebrow">The community</span>
+  <h2 class="section-title">Everyone here<br>has already given</h2>
+  <p class="section-body">That's the difference. This isn't a group you join. It's a circle you earn your way into — and everyone inside it has done the same.</p>
+
+  <div class="node-grid">
+    <div class="node you" onclick="showNodeDetail('You', 'Your profile', 'Gardening · Language', 'Room exchange')">
+      <div class="node-icon">✦</div>
+      <div class="node-name">You</div>
+      <div class="node-offer">Gardening · Language</div>
+      <div class="node-badge">Your node</div>
+    </div>
+    <div class="node matched" onclick="showNodeDetail('Miriam A.', 'Matched', 'Spare room · Hosting', 'Garden work')">
+      <div class="node-icon">◈</div>
+      <div class="node-name">Miriam A.</div>
+      <div class="node-offer">Spare room · Hosting</div>
+      <div class="node-badge">Your match</div>
+    </div>
+    <div class="node member" onclick="showNodeDetail('Jomo W.', 'Member', 'Roofing · Repair', 'Van transport')">
+      <div class="node-icon">◉</div>
+      <div class="node-name">Jomo W.</div>
+      <div class="node-offer">Roofing · Repair</div>
+      <div class="node-badge">Member</div>
+    </div>
+    <div class="node member" onclick="showNodeDetail('Sól B.', 'Member', 'Breathwork · Space', 'Gardening')">
+      <div class="node-icon">◇</div>
+      <div class="node-name">Sól B.</div>
+      <div class="node-offer">Breathwork · Space</div>
+      <div class="node-badge">Member</div>
+    </div>
+    <div class="node member" onclick="showNodeDetail('Ife O.', 'Member', 'Cooking · Nairobi', 'Company')">
+      <div class="node-icon">⟡</div>
+      <div class="node-name">Ife O.</div>
+      <div class="node-offer">Cooking · Nairobi</div>
+      <div class="node-badge">Member</div>
+    </div>
+    <div class="node member" onclick="showNodeDetail('Kwame A.', 'Member', 'Music · Teaching', 'Van transport')">
+      <div class="node-icon">✧</div>
+      <div class="node-name">Kwame A.</div>
+      <div class="node-offer">Music · Teaching</div>
+      <div class="node-badge">Member</div>
+    </div>
+    <div class="node member" onclick="showNodeDetail('Zara H.', 'Member', 'Translation · 3 languages', 'Roof repair')">
+      <div class="node-icon">⬡</div>
+      <div class="node-name">Zara H.</div>
+      <div class="node-offer">Translation · 3 languages</div>
+      <div class="node-badge">Member</div>
+    </div>
+    <div class="node pending" onclick="showPendingDetail()">
+      <div class="node-icon">·</div>
+      <div class="node-name">Arriving soon</div>
+      <div class="node-offer">Exchange in progress</div>
+    </div>
+    <div class="node pending" onclick="showPendingDetail()">
+      <div class="node-icon">·</div>
+      <div class="node-name">Arriving soon</div>
+      <div class="node-offer">Exchange in progress</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRINCIPLES -->
+<div class="principles-strip">
+  <div class="principles-inner reveal">
+    <span class="eyebrow">What makes this different</span>
+    <h2 class="section-title">Six things that<br>set the rules</h2>
+
+    <div class="principles-list">
+      <div class="p" onclick="showPrincipleDetail(0)">
+        <span class="p-icon">🔑</span>
+        <div class="p-title">You earn your place</div>
+        <div class="p-body">No one can join without completing a real exchange first. That's what keeps the community real.</div>
+      </div>
+      <div class="p" onclick="showPrincipleDetail(1)">
+        <span class="p-icon">🤝</span>
+        <div class="p-title">One person at a time</div>
+        <div class="p-body">You don't browse. You receive one match. That's the commitment — and that's what makes it work.</div>
+      </div>
+      <div class="p" onclick="showPrincipleDetail(2)">
+        <span class="p-icon">🌍</span>
+        <div class="p-title">Global but local</div>
+        <div class="p-body">The network is worldwide. But you can filter for your city, your region, your people.</div>
+      </div>
+      <div class="p" onclick="showPrincipleDetail(3)">
+        <span class="p-icon">⭐</span>
+        <div class="p-title">No ratings, no reviews</div>
+        <div class="p-body">You confirm it happened. That's all. No scoring, no stars, no performative feedback.</div>
+      </div>
+      <div class="p" onclick="showPrincipleDetail(4)">
+        <span class="p-icon">📈</span>
+        <div class="p-title">Your profile grows with you</div>
+        <div class="p-body">Every exchange adds to your story. The more you give, the more visible you become.</div>
+      </div>
+      <div class="p" onclick="showPrincipleDetail(5)">
+        <span class="p-icon">💸</span>
+        <div class="p-title">No money inside</div>
+        <div class="p-body">The only currency here is what you have to give. Time, skill, space, care — all equal.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CTA -->
+<div class="cta reveal">
+  <div class="cta-title">Give first.<br>Belong <em>forever.</em></div>
+  <div class="cta-sub">The community you earn is the one that lasts.</div>
+  <button class="btn" onclick="startDeclaration()">Begin your declaration</button>
+</div>
+
+<footer>innerG · X · change &nbsp;·&nbsp; 2026</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3 id="modal-title">Title</h3>
+    <p id="modal-text">Content goes here.</p>
+    <button class="btn" onclick="closeModal()">Got it</button>
+  </div>
+</div>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-toggle');
+  if (html.getAttribute('data-theme') === 'light') {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀';
+  } else {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '☾';
+  }
+  localStorage.setItem('theme', html.getAttribute('data-theme'));
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+  document.documentElement.setAttribute('data-theme', 'light');
+  document.querySelector('.theme-toggle').textContent = '☾';
+}
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal, .step').forEach(el => obs.observe(el));
+
+// Timer
+(function(){
+  let h=71, m=59, s=42;
+  const el = document.getElementById('timer');
+  if (!el) return;
+  setInterval(() => {
+    if (--s < 0) { s=59; if (--m < 0) { m=59; if (--h < 0) h=0; } }
+    el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+})();
+
+// Modal functions
+function showModal(title, text) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-text').textContent = text;
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modal').classList.remove('active');
+}
+
+function showNodeDetail(name, role, offer, need) {
+  showModal(name, `<strong>${role}</strong><br><br>Offers: ${offer}<br><br>Looking for: ${need}`);
+}
+
+function showMatchDetail() {
+  showModal('Miriam A. — Match Details', 'You received a match! She has a quiet room near Lisbon with garden access, available for 3 weeks. In exchange, she needs help tending her mother\'s garden before the rainy season.<br><br>You have 72 hours to reach out and begin the exchange.');
+}
+
+function showSealDetail() {
+  showModal('Confirmation', 'After your exchange completes, both you and your match confirm it happened. This creates your permanent record in the community — and unlocks access to see and connect with other members.');
+}
+
+function showPendingDetail() {
+  showModal('New Members', 'These future members are currently completing their first exchange. Once confirmed, they\'ll join the community and appear as full members with their offers and needs visible.');
+}
+
+function showPrincipleDetail(index) {
+  const principles = [
+    'Every member earned their place by completing a real exchange. No exceptions. This is what keeps the community grounded and authentic.',
+    'You receive one match at a time. No browsing, no comparing. This forces genuine commitment and creates real connections.',
+    'The network spans globally, but you control your visibility. Filter by city, region, or let the match find you anywhere.',
+    'No stars. No ratings. Just confirmation: did it happen? This removes performative pressure and keeps exchanges real.',
+    'Your declaration grows with each exchange. More giving = more visibility = more meaningful connections.',
+    'Time, skill, space, and care are all equal currencies. What you give matters more than what it\'s worth.'
+  ];
+  const titles = ['Earned Place', 'One Match', 'Local + Global', 'No Ratings', 'Growing Profile', 'Equal Exchange'];
+  showModal(titles[index], principles[index]);
+}
+
+function startDeclaration() {
+  showModal('Begin Your Declaration', 'You\'re ready to begin. Declare what you genuinely offer—your time, skill, space, or care. Then declare what you genuinely need.<br><br>Once submitted, you\'ll receive your first match and can complete your first exchange to earn your place in the community.');
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 't' && e.target.tagName !== 'INPUT') toggleTheme();
+});
+</script>
+</body>
+</html>
