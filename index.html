@@ -1471,7 +1471,7 @@ body {
 
 .formats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-top: 2.5rem;
 }
@@ -2223,11 +2223,21 @@ footer {
 <!-- ═══ CONTENT FORMATS -->
 <div class="formats-strip" id="formats">
   <div class="formats-inner reveal">
-    <span class="eyebrow">More ways to share</span>
-    <h2 class="section-title">Any format.<br>Your choice.</h2>
-    <p class="section-body">Exchange isn't just skills in person. Share knowledge, create together, and build in any format that matters.</p>
+    <span class="eyebrow">What members share</span>
+    <h2 class="section-title">Knowledge.<br>Created together.</h2>
+    <p class="section-body">The community grows through shared knowledge. Members contribute guides, tutorials, and resources that compound over time.</p>
 
     <div class="formats-grid">
+      <div class="format-card" onclick="showFormatDetail('ugc')">
+        <span class="format-icon">👥</span>
+        <h3>Community Content</h3>
+        <p>Shared resources, guides, templates made by members for members.</p>
+      </div>
+      <div class="format-card" onclick="showFormatDetail('knowledge')">
+        <span class="format-icon">📚</span>
+        <h3>Knowledge Base</h3>
+        <p>Collective wisdom that grows. Tutorials, documentation, know-how.</p>
+      </div>
       <div class="format-card" onclick="showFormatDetail('video')">
         <span class="format-icon">🎬</span>
         <h3>Video</h3>
@@ -2450,12 +2460,21 @@ function showCardDetail() {
 
 function showFormatDetail(format) {
   const details = {
+    ugc: 'Resources, guides, templates created by members. The community curates knowledge together — everyone contributes.',
+    knowledge: 'Tutorials, documentation, FAQs. The collective wisdom lives here and grows with each exchange.',
     video: 'Video calls, screen shares, recorded tutorials. Face to face matters — even digitally. Exchange a live session for your skills.',
     audio: 'Voice notes, phone calls, audio letters. Sometimes your voice carries what words cannot. Exchange sonic moments.',
     text: 'Written guides, letters, documentation, emails. Words outlive the moment — create something that lasts.',
     live: 'Real-time co-creation, workshops, build sessions. Two minds, one output — make something together, now.'
   };
-  const titles = { video: 'Video Exchange', audio: 'Audio Exchange', text: 'Written Exchange', live: 'Live Co-Creation' };
+  const titles = { 
+    ugc: 'Community Content', 
+    knowledge: 'Knowledge Base', 
+    video: 'Video Exchange', 
+    audio: 'Audio Exchange', 
+    text: 'Written Exchange', 
+    live: 'Live Co-Creation' 
+  };
   showModal(titles[format], details[format]);
 }
 
