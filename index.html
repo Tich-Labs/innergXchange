@@ -981,6 +981,142 @@ body {
   line-height: 1.6;
 }
 
+/* ─── MEMBERSHIP CARD ─── */
+.card-strip {
+  background: var(--bark);
+  padding: 5rem 2rem;
+}
+
+.card-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.card-preview {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.membership-card {
+  width: 280px;
+  height: 176px;
+  background: linear-gradient(135deg, var(--soil) 0%, var(--bark) 100%);
+  border: 1px solid rgba(196,168,130,0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.membership-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.card-label {
+  font-family: 'Fraunces', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--sand);
+}
+
+.card-year {
+  font-size: 0.6rem;
+  color: var(--whisper);
+}
+
+.card-sigil {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sigil-svg {
+  width: 70px;
+  height: 70px;
+  opacity: 0.8;
+}
+
+.card-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--cream);
+}
+
+.card-offer {
+  font-size: 0.65rem;
+  color: var(--mist);
+  font-style: italic;
+}
+
+.card-world {
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-top: 0.25rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(196,168,130,0.1);
+}
+
+.card-id {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--whisper);
+  font-family: monospace;
+}
+
+.card-verify {
+  font-size: 0.9rem;
+  color: var(--sand);
+}
+
+.card-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: skewX(-20deg);
+  animation: shine 4s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0%, 100% { left: -100%; }
+  50% { left: 200%; }
+}
+
+.card-hint {
+  font-size: 0.7rem;
+  color: var(--whisper);
+  font-style: italic;
+}
+
 /* ─── COMPARISON ─── */
 .comparison-strip {
   background: var(--bark);
@@ -1583,6 +1719,51 @@ footer {
   </div>
 </div>
 
+<!-- ═══ MEMBERSHIP CARD -->
+<div class="card-strip">
+  <div class="card-inner reveal">
+    <span class="eyebrow">Your place, in your hand</span>
+    <h2 class="section-title">A card that's<br>only yours.</h2>
+    <p class="section-body">Every member gets a unique sigil — generated from your identity, burned into the blockchain of belonging. Physical. Digital. Yours.</p>
+
+    <div class="card-preview">
+      <div class="membership-card" onclick="showCardDetail()">
+        <div class="card-top">
+          <span class="card-label">innerG·X·change</span>
+          <span class="card-year">2026</span>
+        </div>
+        <div class="card-sigil">
+          <svg viewBox="0 0 100 100" class="sigil-svg">
+            <circle cx="50" cy="50" r="2" fill="var(--sun)"/>
+            <circle cx="30" cy="35" r="1.5" fill="var(--sand)"/>
+            <circle cx="70" cy="40" r="1.5" fill="var(--sand)"/>
+            <circle cx="25" cy="65" r="1.5" fill="var(--sand)"/>
+            <circle cx="75" cy="70" r="1.5" fill="var(--sand)"/>
+            <circle cx="50" cy="25" r="1" fill="var(--whisper)"/>
+            <circle cx="45" cy="80" r="1" fill="var(--whisper)"/>
+            <circle cx="65" cy="60" r="1" fill="var(--whisper)"/>
+            <line x1="50" y1="50" x2="30" y2="35" stroke="var(--sand)" stroke-width="0.5"/>
+            <line x1="50" y1="50" x2="70" y2="40" stroke="var(--sand)" stroke-width="0.5"/>
+            <line x1="50" y1="50" x2="25" y2="65" stroke="var(--sand)" stroke-width="0.5"/>
+            <line x1="50" y1="50" x2="75" y2="70" stroke="var(--sand)" stroke-width="0.5"/>
+            <line x1="30" y1="35" x2="70" y2="40" stroke="var(--whisper)" stroke-width="0.3"/>
+            <line x1="25" y1="65" x2="75" y2="70" stroke="var(--whisper)" stroke-width="0.3"/>
+          </svg>
+        </div>
+        <div class="card-name">Your Name</div>
+        <div class="card-offer">Your skill · space · time</div>
+        <div class="card-world">Wellness</div>
+        <div class="card-footer">
+          <span class="card-id">#XXXX-XXXX-XXXX</span>
+          <span class="card-verify">↻</span>
+        </div>
+        <div class="card-shine"></div>
+      </div>
+      <p class="card-hint">Click to learn more</p>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ COMPARISON -->
 <div class="comparison-strip">
   <div class="comparison-inner reveal">
@@ -1773,6 +1954,10 @@ function showFounderDetail(name) {
   } else {
     showModal('The Builder', 'Built the platform with their own hands. Received community access in exchange for the work. Every member carries a piece of what they started.');
   }
+}
+
+function showCardDetail() {
+  showModal('Membership Card', 'Every member receives a unique sigil — a constellation pattern generated from your member ID. The same ID always produces the same sigil.<br><br>Get it as:<br>• Digital PNG (share anywhere)<br>• Print-ready PDF<br>• Physical card via print-on-demand<br><br>The QR code links to /verify/:card_token — proving you belong.');
 }
 
 function showCompDetail(index) {
