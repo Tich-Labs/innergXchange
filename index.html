@@ -1522,10 +1522,18 @@ body {
 .comp-row {
   display: grid;
   grid-template-columns: 1.8fr 1fr 1fr 1fr;
-  gap: 1px;
+  gap: 2px;
   background: rgba(196,168,130,0.2);
   cursor: pointer;
   transition: background 0.3s ease;
+}
+
+.comp-row:nth-child(odd) {
+  background: #2a2725;
+}
+
+.comp-row:nth-child(even) {
+  background: #222020;
 }
 
 .comp-row:hover {

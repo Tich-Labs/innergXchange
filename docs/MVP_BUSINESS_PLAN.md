@@ -212,6 +212,18 @@ Verification page shows: member status, World, exchange count, member since
 - Exchange count visible on profiles
 - Post-arrival exchange requests (queue-based)
 
+**Forum**
+
+- 4 World boards (Wellness, Entrepreneurship, Conscious Living, Creative Life)
+- Members-only access (state must be `community_member`)
+- Plain-text posts, max 800 chars, no markdown
+- Three energy reactions: 🌱 Resonates · 🔥 Sparks · 🤝 Offering (no public counts)
+- Chronological feed per board, no ranking
+- Member flagging with reason dropdown
+- Auto-hide after 3+ flags from distinct members
+- Admin moderation queue (review, remove, dismiss, suspend)
+- Soft-delete on removal — record preserved for audit
+
 **Membership Card**
 - Auto-generated card on first confirmed exchange
 - Sigil: deterministic SVG constellation per member
@@ -480,6 +492,31 @@ membership_cards
   sigil_svg              # Stored generated SVG string
   qr_code_data           # Stored QR SVG or data URL
   created_at / updated_at
+
+posts
+  id (uuid)
+  user_id → users
+  world          # enum: wellness, entrepreneurship, conscious_living, creative_life
+  body           # plain text, max 800 chars
+  flagged        # boolean, default false
+  removed        # boolean, default false
+  created_at / updated_at
+
+reactions
+  id (uuid)
+  post_id → posts
+  user_id → users
+  kind           # enum: resonates, sparks, offering
+  created_at
+  UNIQUE (post_id, user_id, kind)
+
+post_flags
+  id (uuid)
+  post_id → posts
+  reporter_id → users
+  reason         # enum: harmful / spam / off_world / misrepresents_exchange
+  resolved_at
+  created_at
 ```
 
 ### State Machine (User)
@@ -909,11 +946,14 @@ app/
     cards_controller.rb
     verifications_controller.rb   ← public, no auth
     community_controller.rb
+    forum_controller.rb
+    post_flags_controller.rb
     admin/
       base_controller.rb
       members_controller.rb
       matches_controller.rb
       exchanges_controller.rb
+      posts_controller.rb            ← moderation queue
   models/
     user.rb
     match.rb
