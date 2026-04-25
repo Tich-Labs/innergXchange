@@ -1521,11 +1521,20 @@ body {
 
 .comp-row {
   display: grid;
-  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr;
   gap: 2px;
-  background: rgba(196,168,130,0.2);
-  cursor: pointer;
-  transition: background 0.3s ease;
+}
+
+.comp-row:nth-child(1) { background: #35302d; }
+.comp-row:nth-child(2) { background: #2d2a27; }
+.comp-row:nth-child(3) { background: #35302d; }
+.comp-row:nth-child(4) { background: #2d2a27; }
+.comp-row:nth-child(5) { background: #35302d; }
+.comp-row:nth-child(6) { background: #2d2a27; }
+
+.comp-row.header {
+  background: #1a1815 !important;
+  cursor: default;
 }
 
 .comp-row:nth-child(odd) {
@@ -1536,10 +1545,6 @@ body {
   background: #222020;
 }
 
-.comp-row:hover {
-  background: rgba(196,168,130,0.1);
-}
-
 .comp-row.header {
   background: rgba(26,20,16,0.8);
   cursor: default;
@@ -1548,24 +1553,24 @@ body {
 .comp-row.header .comp-label,
 .comp-row.header .comp-other,
 .comp-row.header .comp-us {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--cream);
-  padding: 1rem;
+  color: #a09080;
+  padding: 0.75rem;
+  font-weight: 600;
 }
 
 .comp-label {
-  background: var(--soil);
   padding: 1rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: var(--cream);
+  color: #e8e0d8;
 }
 
 .comp-other, .comp-us {
   padding: 1rem;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   text-align: center;
   display: flex;
   align-items: center;
@@ -1574,8 +1579,11 @@ body {
 }
 
 .comp-other {
-  background: #3a3530;
   color: #c9b9a8;
+}
+
+.comp-us {
+  color: #f0d878;
 }
 
 .comp-us {

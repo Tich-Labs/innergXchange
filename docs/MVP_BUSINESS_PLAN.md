@@ -872,6 +872,7 @@ end
 - Matches table: pair, state, expiry, actions (override, release)
 - Exchange log: sealed exchanges, reflection snippets
 - Suspension controls
+- Flagged posts queue: sorted by flag count, with actions — Remove / Dismiss / Suspend member
 
 ---
 
@@ -960,6 +961,9 @@ app/
     exchange.rb
     message.rb
     membership_card.rb
+    post.rb
+    reaction.rb
+    post_flag.rb
   concerns/
     sigil_generator.rb
   services/
@@ -977,6 +981,7 @@ app/
     cards/
     verifications/
     community/
+    forum/
     admin/
   mailers/
     match_mailer.rb
