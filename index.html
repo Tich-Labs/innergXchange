@@ -1574,17 +1574,59 @@ body {
   font-weight: 500;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
+  /* Comparison table — card-per-feature layout */
+  .comp-row.header { display: none; }
+
   .comp-row {
-    grid-template-columns: 1fr 1fr;
+    display: block;
+    background: var(--soil);
+    border-bottom: 1px solid rgba(196,168,130,0.06);
   }
+
   .comp-label {
-    grid-column: span 2;
+    display: block;
+    padding: 1rem 1rem 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--cream);
     background: transparent;
-    padding-bottom: 0;
+    letter-spacing: 0.02em;
   }
-  .comp-other, .comp-us {
-    padding: 0.75rem;
+
+  .comp-other,
+  .comp-us {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding: 0.45rem 1rem;
+  }
+
+  .comp-other::before {
+    content: attr(data-label);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--whisper);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .comp-us {
+    background: rgba(212,98,42,0.07);
+    padding-bottom: 1rem;
+  }
+
+  .comp-us::before {
+    content: attr(data-label);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sun);
+    min-width: 120px;
+    flex-shrink: 0;
+    font-weight: 500;
   }
 }
 
@@ -2413,33 +2455,33 @@ footer {
       </div>
       <div class="comp-row" onclick="showCompDetail(0)">
         <div class="comp-label">No money inside</div>
-        <div class="comp-other">BTZ currency</div>
-        <div class="comp-other">Time credits</div>
-        <div class="comp-us">Total</div>
+        <div class="comp-other" data-label="Bunz">BTZ currency</div>
+        <div class="comp-other" data-label="TimeRepublik">Time credits</div>
+        <div class="comp-us"   data-label="innerG Xchange">Total</div>
       </div>
       <div class="comp-row" onclick="showCompDetail(1)">
         <div class="comp-label">Earned entry</div>
-        <div class="comp-other">Sign up</div>
-        <div class="comp-other">Sign up</div>
-        <div class="comp-us">First exchange</div>
+        <div class="comp-other" data-label="Bunz">Sign up</div>
+        <div class="comp-other" data-label="TimeRepublik">Sign up</div>
+        <div class="comp-us"   data-label="innerG Xchange">First exchange</div>
       </div>
       <div class="comp-row" onclick="showCompDetail(2)">
         <div class="comp-label">One match at a time</div>
-        <div class="comp-other">Browse all</div>
-        <div class="comp-other">Browse all</div>
-        <div class="comp-us">You receive one</div>
+        <div class="comp-other" data-label="Bunz">Browse all</div>
+        <div class="comp-other" data-label="TimeRepublik">Browse all</div>
+        <div class="comp-us"   data-label="innerG Xchange">You receive one</div>
       </div>
       <div class="comp-row" onclick="showCompDetail(3)">
         <div class="comp-label">No ratings</div>
-        <div class="comp-other">Stars</div>
-        <div class="comp-other">Stars</div>
-        <div class="comp-us">Confirmation only</div>
+        <div class="comp-other" data-label="Bunz">Stars</div>
+        <div class="comp-other" data-label="TimeRepublik">Stars</div>
+        <div class="comp-us"   data-label="innerG Xchange">Confirmation only</div>
       </div>
       <div class="comp-row" onclick="showCompDetail(4)">
         <div class="comp-label">Physical card</div>
-        <div class="comp-other">No</div>
-        <div class="comp-other">No</div>
-        <div class="comp-us">Yes</div>
+        <div class="comp-other" data-label="Bunz">No</div>
+        <div class="comp-other" data-label="TimeRepublik">No</div>
+        <div class="comp-us"   data-label="innerG Xchange">Yes</div>
       </div>
     </div>
   </div>
