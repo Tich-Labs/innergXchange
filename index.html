@@ -1722,6 +1722,135 @@ footer {
   transition: all 0.4s ease;
 }
 
+/* ─── BURGER BUTTON ─── */
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.burger-line {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--sand);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+.nav-burger.open .burger-line:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-burger.open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-burger.open .burger-line:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ─── RESPONSIVE / MOBILE ─── */
+@media (max-width: 768px) {
+  /* Show burger, shift theme toggle */
+  .nav-burger { display: flex; }
+
+  /* Hide desktop nav links by default */
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 53px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 1rem 1.5rem 1.5rem;
+    background: rgba(26,20,16,0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(196,168,130,0.12);
+    z-index: 998;
+  }
+
+  [data-theme="light"] .nav-links {
+    background: rgba(248,245,239,0.98);
+  }
+
+  /* Open state */
+  .nav-links.open { display: flex; }
+
+  /* Mobile link items */
+  .nav-links a {
+    font-size: 1rem;
+    padding: 0.9rem 0.25rem;
+    border-bottom: 1px solid rgba(245,237,224,0.05);
+    letter-spacing: 0.08em;
+    display: block;
+    text-align: left;
+  }
+
+  [data-theme="light"] .nav-links a {
+    border-bottom-color: rgba(26,20,16,0.05);
+  }
+
+  .nav-links .nav-cta {
+    display: block;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: var(--ember);
+    border-color: var(--ember);
+    border-radius: 5px;
+    color: var(--cream);
+    text-align: center;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+  }
+
+  .nav-links .theme-toggle-mini {
+    margin-top: 0.75rem;
+    align-self: flex-start;
+  }
+
+  /* Hero */
+  .hero { padding: 6rem 1.25rem 4rem; }
+
+  /* General section padding reduction */
+  .section                { padding: 4rem 1.25rem; }
+  .community-section      { padding: 4rem 1.25rem; }
+  .exchange-strip         { padding: 3.5rem 1.25rem; }
+  .exchange-happens       { padding: 3.5rem 1.25rem; }
+  .principles-strip       { padding: 3.5rem 1.25rem; }
+  .card-strip             { padding: 3.5rem 1.25rem; }
+  .forum-strip            { padding: 3.5rem 1.25rem; }
+  .formats-strip          { padding: 3.5rem 1.25rem; }
+  .comparison-strip       { padding: 3.5rem 1.25rem; }
+  .cta                    { padding: 5rem 1.25rem; }
+
+  /* Steps — tighter left column */
+  .step {
+    grid-template-columns: 48px 1fr;
+    gap: 1rem;
+  }
+
+  /* Membership card — scale to screen width */
+  .membership-card {
+    width: min(400px, calc(100vw - 3rem));
+    height: auto;
+    min-height: 220px;
+  }
+
+  /* CTA form — stack vertically */
+  .waitlist-form {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+  }
+  .email-input { width: 100%; }
+  .waitlist-form .btn { width: 100%; text-align: center; }
+
+}
+
 /* ─── SCROLL REVEAL ─── */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .reveal.visible { opacity: 1; transform: none; }
@@ -1806,7 +1935,7 @@ footer {
 <!-- TOP NAV -->
 <nav class="top-nav">
   <div class="nav-logo" onclick="scrollToSection('hero')">innerG</div>
-  <div class="nav-links">
+  <div class="nav-links" id="nav-links">
     <a onclick="scrollToSection('how-it-works')">How it works</a>
     <a onclick="scrollToSection('examples')">Examples</a>
     <a onclick="scrollToSection('community')">Community</a>
@@ -1817,6 +1946,11 @@ footer {
     <span onclick="scrollToSection('cta')" class="nav-cta">Join</span>
     <button class="theme-toggle-mini" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
   </div>
+  <button class="nav-burger" id="nav-burger" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+  </button>
 </nav>
 
 <!-- ═══ HERO -->
@@ -2385,14 +2519,10 @@ footer {
 // Theme toggle
 function toggleTheme() {
   const html = document.documentElement;
-  const btn = document.querySelector('.theme-toggle');
-  if (html.getAttribute('data-theme') === 'light') {
-    html.setAttribute('data-theme', 'dark');
-    btn.textContent = '☀';
-  } else {
-    html.setAttribute('data-theme', 'light');
-    btn.textContent = '☾';
-  }
+  const isLight = html.getAttribute('data-theme') === 'light';
+  html.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  const icon = isLight ? '☀' : '☾';
+  document.querySelectorAll('.theme-toggle-mini').forEach(b => b.textContent = icon);
   localStorage.setItem('theme', html.getAttribute('data-theme'));
 }
 
@@ -2400,7 +2530,7 @@ function toggleTheme() {
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'light') {
   document.documentElement.setAttribute('data-theme', 'light');
-  document.querySelector('.theme-toggle').textContent = '☾';
+  document.querySelectorAll('.theme-toggle-mini').forEach(b => b.textContent = '☾');
 }
 
 // Scroll reveal
@@ -2577,7 +2707,24 @@ function switchBoard(tab) {
     </div>`).join('');
 }
 
+function toggleMobileNav() {
+  const links = document.getElementById('nav-links');
+  const burger = document.getElementById('nav-burger');
+  const isOpen = links.classList.toggle('open');
+  burger.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileNav() {
+  const links = document.getElementById('nav-links');
+  const burger = document.getElementById('nav-burger');
+  if (links) links.classList.remove('open');
+  if (burger) burger.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 function scrollToSection(id) {
+  closeMobileNav();
   const el = document.getElementById(id);
   if (!el) return;
   const navHeight = document.querySelector('.top-nav').offsetHeight;
