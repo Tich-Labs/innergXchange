@@ -1574,60 +1574,17 @@ body {
   font-weight: 500;
 }
 
-@media (max-width: 640px) {
-  /* Comparison table — card-per-feature layout */
-  .comp-row.header { display: none; }
-
-  .comp-row {
-    display: block;
-    background: var(--soil);
-    border-bottom: 1px solid rgba(196,168,130,0.06);
-  }
-
-  .comp-label {
-    display: block;
-    padding: 1rem 1rem 0.5rem;
-    font-size: 1.05rem;
-    font-weight: 500;
-    color: var(--cream);
-    background: transparent;
-    letter-spacing: 0.02em;
-  }
-
-  .comp-other,
-  .comp-us {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-    padding: 0.45rem 1rem;
-  }
-
-  .comp-other::before {
-    content: attr(data-label);
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--whisper);
-    min-width: 120px;
-    flex-shrink: 0;
-  }
-
-  .comp-us {
-    background: rgba(212,98,42,0.07);
-    padding-bottom: 1rem;
-  }
-
-  .comp-us::before {
-    content: attr(data-label);
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--sun);
-    min-width: 120px;
-    flex-shrink: 0;
-    font-weight: 500;
-  }
+/* comparison-strip scoped rules win over generic .comp-* rules */
+@media (max-width: 768px) {
+  .comparison-strip .comp-row.header          { display: none; }
+  .comparison-strip .comp-row                 { display: block; background: var(--soil); border-bottom: 1px solid rgba(196,168,130,0.06); }
+  .comparison-strip .comp-label               { display: block; padding: 1rem 1rem 0.5rem; font-size: 1.05rem; font-weight: 500; color: var(--cream); background: transparent; }
+  .comparison-strip .comp-other,
+  .comparison-strip .comp-us                  { display: flex; justify-content: space-between; align-items: center; text-align: left; padding: 0.45rem 1rem; }
+  .comparison-strip .comp-other               { background: var(--bark); }
+  .comparison-strip .comp-us                  { background: rgba(212,98,42,0.07); padding-bottom: 1rem; }
+  .comparison-strip .comp-other::before       { content: attr(data-label); font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--whisper); min-width: 110px; flex-shrink: 0; }
+  .comparison-strip .comp-us::before          { content: attr(data-label); font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sun); font-weight: 500; min-width: 110px; flex-shrink: 0; }
 }
 
 /* ─── CTA ─── */
